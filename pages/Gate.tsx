@@ -25,7 +25,7 @@ const divisions = [
         desc: "Wadah bagi para penulis untuk mengekspresikan ide, puisi, dan cerita yang menggugah jiwa.",
         logo: "/logo-oc-karyatulis.jpg",
         icon: Type,
-        link: "https://forms.gle/placeholder-karyatulis",
+        link: "https://chat.whatsapp.com/CQz2xHzSxGT4YojQ3EWrbE",
         color: "from-rose-500 to-rose-700",
         text: "text-rose-400"
     },
@@ -36,7 +36,7 @@ const divisions = [
         desc: "Eksplorasi estetika visual, tipografi, dan komposisi untuk menciptakan karya yang memukau.",
         logo: "/logo-oc-desain.jpg",
         icon: PenTool,
-        link: "https://forms.gle/placeholder-desain",
+        link: "https://forms.gle/RZJgCeZWgBQF8DDd8",
         color: "from-purple-500 to-purple-700",
         text: "text-purple-400"
     },
@@ -44,10 +44,10 @@ const divisions = [
         id: 'video',
         name: "Video Editing",
         tagline: "Sinematografi & Momen",
-        desc: "Menggabungkan potongan momen menjadi narasi visual yang hidup dan bercerita.",
+        desc: "Grup vid edit. Menggabungkan potongan momen menjadi narasi visual yang hidup dan bercerita.",
         logo: "/logo-oc-video.jpg",
         icon: Youtube,
-        link: "https://forms.gle/placeholder-video",
+        link: "https://chat.whatsapp.com/CQz2xHzSxGT4YojQ3EWrbE",
         color: "from-blue-500 to-blue-700",
         text: "text-blue-400"
     },
@@ -58,7 +58,7 @@ const divisions = [
         desc: "Seni menyebarkan tawa melalui gambar dan konteks yang relavan dengan budaya pop.",
         logo: "/logo-oc-meme.jpg",
         icon: Smile,
-        link: "https://forms.gle/placeholder-meme",
+        link: "https://discord.com/invite/YrUSt4kjBm",
         color: "from-yellow-500 to-yellow-700",
         text: "text-yellow-400"
     },
@@ -66,10 +66,10 @@ const divisions = [
         id: 'coding',
         name: "Coding",
         tagline: "Logika Pembangun Masa Depan",
-        desc: "Menciptakan solusi digital melalui barisan kode dan algoritma yang presisi.",
+        desc: "Beradaptasi atau Mati. Menciptakan solusi digital melalui barisan kode dan algoritma yang presisi.",
         logo: "/logo-oc-coding.jpg",
         icon: Terminal,
-        link: "https://forms.gle/placeholder-coding",
+        link: "https://forms.gle/d1SBHkeCWdDfYLGHA",
         color: "from-emerald-500 to-emerald-700",
         text: "text-emerald-400"
     },
@@ -84,7 +84,7 @@ const Gate = () => {
     const lockBtn = useRef<HTMLButtonElement>(null);
 
     const [isUnlocked, setIsUnlocked] = useState(false);
-    const [isMaintenance] = useState(true); // Toggle this for maintenance
+    const [isMaintenance] = useState(false); // Mode pemeliharaan dinonaktifkan
     const navigate = useNavigate();
 
     useGSAP(() => {
@@ -163,6 +163,8 @@ const Gate = () => {
 
     return (
         <div ref={container} className="fixed inset-0 z-50 bg-[#020202] overflow-hidden font-sans text-white select-none">
+            {/* SEO & FCP Optimization */}
+            <h1 className="sr-only">OurCreativity Portal Divisi</h1>
 
             {/* IMMERSIVE BACKGROUND (Revealed behind the gate) */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -222,7 +224,7 @@ const Gate = () => {
 
                             <div className="flex items-center justify-center gap-4">
                                 <div className="px-4 py-1.5 rounded-full border border-white/5 bg-white/5 text-[10px] font-bold tracking-[0.2em] text-gray-500">
-                                    STATUS: MAINTENANCE
+                                    STATUS: PEMELIHARAAN
                                 </div>
                             </div>
                         </div>
@@ -291,13 +293,13 @@ const Gate = () => {
             {/* MAIN CONTENT (Story Revealed) */}
             <div
                 ref={contentWrapper}
-                className={`relative z-20 w-full h-full overflow-y-auto ${!isUnlocked ? 'invisible pointer-events-none' : 'visible pointer-events-auto'}`}
+                className={`relative z-20 w-full h-full overflow-y-auto transition-opacity duration-1000 ${!isUnlocked ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}
             >
                 <div className="min-h-screen container mx-auto px-6 py-32 flex flex-col items-center">
 
                     {/* Story Header */}
                     <div className="story-item text-center mb-24 max-w-4xl">
-                        <h2 className="text-rose-500 text-xs font-bold tracking-[1em] uppercase mb-8">INITIATED_SUCCESSFULLY</h2>
+                        <h2 className="text-rose-500 text-xs font-bold tracking-[1em] uppercase mb-8">DIINISIASI_BERHASIL</h2>
                         <h1 className="text-6xl md:text-8xl font-serif text-white mb-8 leading-tight tracking-tight">
                             Selamat Datang di <br />
                             <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-purple-400 to-indigo-400">Portal Divisi</span>
