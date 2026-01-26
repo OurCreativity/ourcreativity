@@ -163,6 +163,8 @@ const Gate = () => {
 
     return (
         <div ref={container} className="fixed inset-0 z-50 bg-[#020202] overflow-hidden font-sans text-white select-none">
+            {/* SEO & FCP Optimization */}
+            <h1 className="sr-only">OurCreativity Portal Divisi</h1>
 
             {/* IMMERSIVE BACKGROUND (Revealed behind the gate) */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -291,7 +293,7 @@ const Gate = () => {
             {/* MAIN CONTENT (Story Revealed) */}
             <div
                 ref={contentWrapper}
-                className={`relative z-20 w-full h-full overflow-y-auto ${!isUnlocked ? 'invisible pointer-events-none' : 'visible pointer-events-auto'}`}
+                className={`relative z-20 w-full h-full overflow-y-auto transition-opacity duration-1000 ${!isUnlocked ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}
             >
                 <div className="min-h-screen container mx-auto px-6 py-32 flex flex-col items-center">
 
