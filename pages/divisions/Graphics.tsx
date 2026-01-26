@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Maximize2, Crosshair, Users, Trophy, Zap, Star, ArrowUpRight } from 'lucide-react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { ArrowLeft, Maximize2, Crosshair, Users, Trophy, Zap, Star, ArrowUpRight, Pin } from 'lucide-react';
 
 // --- Komponen Marquee Lokal ---
 const Marquee = ({ text }: { text: string }) => (
-    <div className="overflow-hidden whitespace-nowrap py-4 bg-purple-900/20 border-y border-purple-500/20">
+    <div className="overflow-hidden whitespace-nowrap py-4 bg-[#1a4731]/40 border-y border-[#2d5a42]/50 backdrop-blur-sm relative z-20">
         <motion.div
             animate={{ x: [0, -1000] }}
             transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
             className="inline-block"
         >
             {[...Array(4)].map((_, i) => (
-                <span key={i} className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-white mx-4">
+                <span key={i} className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#4ade80] to-white mx-4">
                     {text}
                 </span>
             ))}
@@ -33,200 +33,355 @@ const highlights = [
         desc: "OurCreativity 0.7 - Total 80+ Participant",
         image: "/tagwall-90s-design.jpg",
         rotate: 6,
-        margin: "mt-10",
-        zIndex: "z-10"
+        x: "15%",
+        y: "20%",
+        zIndex: 10
     },
     {
         title: "TAGWALL BRUTALISM",
         desc: "OurCreativity 1.2 - Part 1",
         image: "/tagwall-brutalism.webp",
         rotate: -3,
-        margin: "mt-0",
-        zIndex: "z-20"
+        x: "45%",
+        y: "15%",
+        zIndex: 20
     },
     {
         title: "TAGWALL KEMERDEKAAN",
         desc: "Lekas Sembuh Indonesiaku. 70+",
         image: "/tagwall-kemerdekaan.webp",
         rotate: 3,
-        margin: "mt-20",
-        zIndex: "z-10"
+        x: "10%",
+        y: "60%",
+        zIndex: 15
     },
     {
         title: "TAGWALL SUPERHERO",
         desc: "OurCreativity 1.1 - Total 80+ Participant",
         image: "/tagwall-superhero.webp",
         rotate: -6,
-        margin: "mt-5",
-        zIndex: "z-0"
+        x: "70%",
+        y: "55%",
+        zIndex: 5
     }
 ];
 
-export const Graphics = () => {
+// --- Sub-komponen Lampu Gantung ---
+const HangingLamp = () => {
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const springX = useSpring(mouseX, { damping: 25, stiffness: 120 });
+    const springY = useSpring(mouseY, { damping: 25, stiffness: 120 });
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            mouseX.set(e.clientX);
+            mouseY.set(e.clientY);
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, [mouseX, mouseY]);
+
     return (
-        <div className="min-h-screen bg-black text-white font-sans selection:bg-purple-500 selection:text-white overflow-x-hidden">
+        <>
+            {/* Cahaya Senter */}
+            <motion.div
+                className="fixed inset-0 pointer-events-none z-[100] mix-blend-soft-light shadow-[inset_0_0_100px_rgba(0,0,0,1)]"
+                style={{
+                    background: `radial-gradient(circle 350px at ${springX}px ${springY}px, rgba(255,255,240,0.4) 0%, rgba(0,0,0,0.95) 100%)`
+                }}
+            />
+            {/* Cahaya Spotlight Terfokus */}
+            <motion.div
+                className="fixed inset-0 pointer-events-none z-[101] mix-blend-overlay"
+                style={{
+                    background: `radial-gradient(circle 120px at ${springX}px ${springY}px, rgba(255,255,200,0.6) 0%, transparent 100%)`
+                }}
+            />
+
+            {/* Lampu Visual di Sudut */}
+            <div className="fixed top-0 right-0 w-64 h-64 pointer-events-none z-[102] opacity-80">
+                <img src="/lamp-head.png" alt="" className="w-full h-full object-contain rotate-[-15deg] transform translate-x-12 translate-y-[-12px] brightness-150 drop-shadow-2xl"
+                    onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+            </div>
+        </>
+    );
+};
+
+export const Graphics = () => {
+    const boardRef = useRef<HTMLDivElement>(null);
+
+    return (
+        <div className="min-h-screen bg-[#0d2118] text-white font-sans selection:bg-[#4ade80] selection:text-black overflow-x-hidden relative">
+
+            {/* CUTTING MAT BACKGROUND SYSTEM */}
+            <div className="fixed inset-0 pointer-events-none z-0">
+                {/* Warna Dasar Hijau Cutting Mat */}
+                <div className="absolute inset-0 bg-[#0d2118]" />
+
+                {/* Grid Halus */}
+                <div className="absolute inset-0 opacity-30"
+                    style={{
+                        backgroundImage: `linear-gradient(#1a4731 1px, transparent 1px), linear-gradient(90deg, #1a4731 1px, transparent 1px)`,
+                        backgroundSize: '20px 20px'
+                    }}
+                />
+
+                {/* Grid Utama (Setiap 5 kotak) */}
+                <div className="absolute inset-0 opacity-40"
+                    style={{
+                        backgroundImage: `linear-gradient(#2d5a42 2px, transparent 2px), linear-gradient(90deg, #2d5a42 2px, transparent 2px)`,
+                        backgroundSize: '100px 100px'
+                    }}
+                />
+
+                {/* Markings Penggaris di Tepi */}
+                <div className="absolute top-0 left-0 bottom-0 w-8 border-r border-[#1a4731] flex flex-col items-center py-4 gap-20 opacity-40 font-mono text-[10px]">
+                    {[...Array(10)].map((_, i) => <span key={i}>{i * 10}</span>)}
+                </div>
+                <div className="absolute top-0 left-0 right-0 h-8 border-b border-[#1a4731] flex items-center px-12 gap-20 opacity-40 font-mono text-[10px]">
+                    {[...Array(15)].map((_, i) => <span key={i}>{i * 10}</span>)}
+                </div>
+
+                {/* Tekstur Material Berpori */}
+                <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+            </div>
+
+            <HangingLamp />
+
             {/* Navigasi Mengambang */}
-            <nav className="fixed top-6 left-0 right-0 z-50 px-6 md:px-12 flex justify-between items-start pointer-events-none">
-                <Link to="/info" className="flex items-center gap-2 text-sm font-mono hover:text-purple-400 transition-colors bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 pointer-events-auto">
-                    <ArrowLeft size={16} /> KEMBALI
+            <nav className="fixed top-8 left-0 right-0 z-[110] px-6 md:px-12 flex justify-between items-start pointer-events-none">
+                <Link to="/info" className="flex items-center gap-2 text-sm font-mono hover:text-[#4ade80] transition-colors bg-black/60 backdrop-blur-md px-6 py-3 rounded-none border border-white/10 pointer-events-auto transform rotate-[-1deg] shadow-lg">
+                    <ArrowLeft size={16} /> [ KEMBALI ]
                 </Link>
                 <div className="hidden md:flex flex-col items-end gap-1 pointer-events-auto">
-                    <div className="flex items-center gap-4 text-xs font-mono text-gray-500 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
-                        <span>STATUS: AKTIF</span>
-                        <span className="text-purple-500 animate-pulse">● LIVE</span>
-                    </div>
-                    <div className="text-xs font-mono text-purple-400 bg-black/50 backdrop-blur-md px-4 py-1 rounded-full border border-white/10 mt-1">
-                        ANGGOTA: 700+
+                    <div className="flex items-center gap-4 text-xs font-mono text-gray-300 bg-black/60 backdrop-blur-md px-4 py-2 border border-white/10 shadow-lg transform rotate-[1deg]">
+                        <span>STATUS: LIVE_SESSIONS</span>
+                        <span className="text-[#4ade80] animate-pulse">●</span>
                     </div>
                 </div>
             </nav>
 
-            {/* Bagian Hero */}
-            <header className="relative min-h-screen flex flex-col pt-24 md:pt-32 border-x border-white/5 max-w-[1600px] mx-auto">
-                <div className="flex-1 flex flex-col justify-center px-6 md:px-12 relative">
-                    {/* Garis Grid Dekoratif */}
-                    <div className="absolute inset-0 grid grid-cols-6 pointer-events-none opacity-20">
-                        {[...Array(6)].map((_, i) => (
-                            <div key={i} className="border-r border-purple-500/30 h-full"></div>
-                        ))}
-                    </div>
+            <div className="relative z-10 max-w-[1800px] mx-auto min-h-screen">
 
+                {/* Hero Section - Dirancang seperti potongan kertas di board */}
+                <header className="pt-32 pb-20 px-6 md:px-12 flex flex-col md:flex-row gap-12 items-start justify-between">
                     <motion.div
-                        initial={{ opacity: 0, y: 100 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: "circOut" }}
-                        className="relative z-10"
+                        initial={{ opacity: 0, x: -50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="relative max-w-4xl"
                     >
-                        <div className="flex items-start justify-between mb-4 border-b border-purple-500/30 pb-4">
-                            <div className="flex flex-col">
-                                <span className="font-mono text-purple-400 text-sm">[ DIVISI_01: DESAIN GRAFIS ]</span>
-                                <a
-                                    href="https://instagram.com/ocdesaingrafis"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="font-mono text-purple-500/60 text-[10px] mt-1 tracking-widest hover:text-purple-400 transition-colors cursor-pointer"
-                                >
-                                    IG: @ocdesaingrafis
-                                </a>
+                        {/* Judul dengan gaya Paper Collage */}
+                        <div className="relative inline-block mb-12 transform rotate-[-2deg]">
+                            <div className="absolute -inset-4 bg-white shadow-xl transform rotate-[1deg] z-0" />
+                            <div className="relative z-10 p-4">
+                                <span className="font-mono text-[#1a4731] text-xs font-bold block mb-2 underline decoration-wavy">DIV_01 // DESAIN_GRAFIS</span>
+                                <h1 className="text-6xl md:text-9xl font-black text-black leading-none uppercase tracking-tighter">
+                                    KOMUNITAS <br />
+                                    <span className="text-[#1a4731] italic">PALING LIAR</span>
+                                </h1>
+                                <div className="absolute -top-6 -right-6 w-12 h-12 bg-[#4ade80] rounded-full flex items-center justify-center text-black font-bold transform rotate-12 shadow-md">
+                                    700+
+                                </div>
                             </div>
-                            <img src="/logo-oc-desain.jpg" alt="OC Design Logo" className="w-12 h-12 rounded-full border border-purple-500/50 object-cover" />
+                            {/* Selotip Selotip */}
+                            <div className="absolute -top-8 left-1/4 w-32 h-10 bg-white/40 backdrop-blur-sm rotate-[-45deg] z-20 pointer-events-none border-x border-black/5" />
+                            <div className="absolute -bottom-8 right-1/4 w-32 h-10 bg-white/40 backdrop-blur-sm rotate-[-45deg] z-20 pointer-events-none border-x border-black/5" />
                         </div>
 
-                        <h1 className="text-5xl md:text-[10vw] leading-[0.9] md:leading-[0.85] font-black uppercase tracking-tighter mix-blend-difference mb-8">
-                            Komunitas <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-purple-400 to-white">Paling Liar</span>
-                        </h1>
-
-                        <div className="mt-8 flex flex-col md:flex-row gap-8 md:gap-12 items-start md:items-end justify-between">
-                            <div className="max-w-2xl">
-                                <p className="text-xl md:text-3xl text-white font-bold leading-relaxed mb-4">
-                                    Divisi favorit dan paling aktif di OurCreativity.
+                        <div className="mt-8 flex flex-col md:flex-row gap-8 items-start">
+                            <div className="max-w-xl bg-black/40 backdrop-blur-md p-6 border border-white/10 shadow-2xl relative">
+                                <Pin className="absolute -top-3 left-1/2 -translate-x-1/2 text-red-500 fill-red-500 w-6 h-6" />
+                                <p className="text-xl md:text-2xl text-white font-bold leading-tight mb-4">
+                                    Rumah bagi kreator yang siap menggebrak industri kreatif. Bukan grup chat, ini adalah pergerakan.
                                 </p>
-                                <p className="text-base md:text-lg text-gray-400 font-mono border-l-4 border-purple-500 pl-4">
-                                    Rumah bagi <span className="text-purple-400">700+ desainer</span> yang siap menggebrak industri kreatif. Bukan sekadar grup chat, ini adalah pergerakan.
+                                <p className="text-sm md:text-base text-gray-400 font-mono">
+                                    [ LOG_START: 2025_V5 ] <br />
+                                    [ LOCATION: INTERNET_WIDE ]
                                 </p>
-                            </div>
-
-                            <div className="flex gap-4">
-                                <div className="w-24 h-24 md:w-32 md:h-32 border border-purple-500/30 rounded-full flex items-center justify-center animate-spin-slow bg-purple-500/5 backdrop-blur-sm">
-                                    <Crosshair className="text-purple-500 w-8 h-8 md:w-10 md:h-10" />
-                                </div>
                             </div>
                         </div>
                     </motion.div>
-                </div>
 
-                <Marquee text="KOLABORASI TANPA BATAS • KARYA TANPA HENTI •" />
-            </header>
-
-            {/* Bagian Statistik / Manifesto */}
-            <section className="border-x border-white/5 max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10 bg-[#0a0a0a]">
-                {
-                    stats.map((stat, i) => (
-                        <div key={i} className="p-8 md:p-12 flex flex-col items-center text-center group hover:bg-purple-900/10 transition-colors">
-                            {i === 0 && <Users className="w-12 h-12 md:w-16 md:h-16 text-purple-500 mb-6 group-hover:scale-110 transition-transform" />}
-                            {i === 1 && <Trophy className="w-12 h-12 md:w-16 md:h-16 text-purple-500 mb-6 group-hover:scale-110 transition-transform" />}
-                            {i === 2 && <Zap className="w-12 h-12 md:w-16 md:h-16 text-purple-500 mb-6 group-hover:scale-110 transition-transform" />}
-                            <h3 className="text-4xl md:text-5xl font-black text-white mb-2">{stat.value}</h3>
-                            <p className="font-mono text-purple-400 uppercase text-sm md:text-base">{stat.label}</p>
+                    <div className="flex-shrink-0 relative group">
+                        <div className="w-48 h-48 md:w-64 md:h-64 relative transform rotate-3">
+                            <div className="absolute inset-0 bg-white shadow-2xl transform transition-transform group-hover:rotate-0" />
+                            <img src="/logo-oc-desain.jpg" alt="OC Design Logo" className="relative z-10 w-full h-full object-cover p-2 gray-scale group-hover:grayscale-0 transition-all duration-500" />
                         </div>
-                    ))
-                }
-            </section>
+                        {/* Sticky Note */}
+                        <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-yellow-200 text-black p-4 shadow-lg transform rotate-[-8deg] font-mono text-xs hover:rotate-0 transition-transform">
+                            <p className="font-bold underline mb-2 italic">TODO LIST:</p>
+                            <ul className="space-y-1">
+                                <li>- Breaking Rules [OK]</li>
+                                <li>- Make Chaos [OK]</li>
+                                <li>- Stay Wild [OK]</li>
+                            </ul>
+                        </div>
+                    </div>
+                </header>
 
-            {/* Galeri Kolase Tersebar */}
-            < section className="py-32 border-x border-white/5 max-w-[1600px] mx-auto px-6 overflow-hidden relative" >
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+                <Marquee text="KOLABORASI TANPA BATAS • KARYA TANPA HENTI • BREAK THE RULES •" />
 
-                <div className="flex flex-col items-center justify-center mb-20 relative z-10">
-                    <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter text-center">
-                        Galeri <span className="text-purple-500 italic">Kekacauan</span>
-                    </h2>
-                    <p className="font-mono text-gray-500 mt-4">DOKUMENTASI KEGIATAN & KARYA</p>
-                </div>
+                {/* Statistik sebagai Sticker */}
+                <section className="py-20 px-6 md:px-12 flex flex-wrap gap-8 justify-center relative overflow-hidden">
+                    {stats.map((stat, i) => (
+                        <motion.div
+                            key={i}
+                            whileHover={{ scale: 1.1, rotate: i % 2 === 0 ? 5 : -5 }}
+                            className={`p-10 bg-white text-black shadow-2xl border-4 border-black relative ${i % 2 === 0 ? 'rotate-[-2deg]' : 'rotate-[2deg]'}`}
+                        >
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-red-600 rounded-full border-4 border-white shadow-inner" />
+                            <h3 className="text-5xl font-black mb-1">{stat.value}</h3>
+                            <p className="font-mono text-xs uppercase tracking-tighter opacity-60 underline font-bold">{stat.label}</p>
+                        </motion.div>
+                    ))}
+                </section>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative min-h-[800px]">
+                {/* THE CONCEPT BOARD - INTERACTIVE SECTION */}
+                <section ref={boardRef} className="relative w-full h-[1000px] mt-20 mb-40 overflow-hidden cursor-crosshair">
+
+                    {/* Elemen Dekoratif Board */}
+                    <div className="absolute top-10 left-10 text-9xl font-black text-white/5 uppercase select-none pointer-events-none">
+                        CONCEPT_BOARD_V.01
+                    </div>
+
+                    <div className="absolute bottom-10 right-10 flex flex-col items-end gap-2 text-white/20 font-mono text-[10px] select-none pointer-events-none">
+                        <span>LATENCY: 5MS</span>
+                        <span>INTERACTIVE: ENABLED</span>
+                        <span>PHYSICS: FRAMER_MOTION</span>
+                    </div>
+
+                    {/* RED STRINGS (Connecting items) */}
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-60 z-10">
+                        <defs>
+                            <filter id="stringFilter" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />
+                                <feOffset in="blur" dx="1" dy="1" result="offsetBlur" />
+                                <feMerge>
+                                    <feMergeNode in="offsetBlur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        {/* Garis Merah ke-1 */}
+                        <motion.line
+                            x1="22%" y1="28%" x2="48%" y2="22%"
+                            stroke="#ef4444" strokeWidth="3" filter="url(#stringFilter)"
+                            initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+                        />
+                        {/* Garis Merah ke-2 */}
+                        <motion.line
+                            x1="48%" y1="22%" x2="18%" y2="68%"
+                            stroke="#ef4444" strokeWidth="3" filter="url(#stringFilter)"
+                            initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+                            transition={{ delay: 0.5 }}
+                        />
+                        {/* Garis Merah ke-3 */}
+                        <motion.line
+                            x1="48%" y1="22%" x2="78%" y2="62%"
+                            stroke="#ef4444" strokeWidth="3" filter="url(#stringFilter)"
+                            initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+                            transition={{ delay: 1 }}
+                        />
+                        {/* Titik Simpul (Pins) */}
+                        <circle cx="22%" cy="28%" r="4" fill="#600" />
+                        <circle cx="48%" cy="22%" r="4" fill="#600" />
+                        <circle cx="18%" cy="68%" r="4" fill="#600" />
+                        <circle cx="78%" cy="62%" r="4" fill="#600" />
+                    </svg>
+
+                    {/* Draggable Polaroids */}
                     {highlights.map((item, i) => (
                         <motion.div
                             key={i}
-                            initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
-                            whileInView={{ opacity: 1, scale: 1, rotate: item.rotate }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: i * 0.1 }}
-                            className={`relative group ${item.margin} ${item.zIndex}`}
+                            drag
+                            dragMomentum={false}
+                            dragConstraints={boardRef}
+                            style={{
+                                top: item.y,
+                                left: item.x,
+                                rotate: item.rotate,
+                                zIndex: item.zIndex
+                            }}
+                            whileDrag={{ scale: 1.05, zIndex: 100, rotate: 0 }}
+                            className="absolute group active:cursor-grabbing"
                         >
-                            <div className="relative aspect-[3/4] bg-gray-900 border-4 border-white p-2 shadow-[10px_10px_0px_0px_rgba(168,85,247,0.5)] hover:shadow-[15px_15px_0px_0px_rgba(168,85,247,0.8)] transition-all duration-300 transform hover:-translate-y-2 hover:rotate-0">
-                                <div className="absolute inset-0 bg-purple-500/20 mix-blend-overlay z-10 pointer-events-none"></div>
-                                <img
-                                    src={item.image}
-                                    alt={item.title}
-                                    className="w-full h-full object-cover grayscale contrast-125 brightness-90 group-hover:grayscale-0 transition-all duration-500"
-                                />
-
-                                {/* Efek Selotip (Miring) */}
-                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/80 rotate-[-2deg] shadow-sm backdrop-blur-sm"></div>
-
-                                <div className="absolute bottom-0 left-0 right-0 p-4 bg-black/90 text-white transform translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                                    <h3 className="font-black text-xl uppercase text-purple-400">{item.title}</h3>
-                                    <p className="text-xs font-mono text-gray-300">{item.desc}</p>
+                            <div className="w-64 md:w-80 bg-white p-4 pb-12 shadow-2xl border border-black/5 transform-gpu transition-shadow group-hover:shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
+                                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-6 h-6 bg-red-600 rounded-full border-4 border-black/20 z-20 shadow-inner" />
+                                <div className="aspect-square bg-gray-100 overflow-hidden relative mb-4">
+                                    <div className="absolute inset-0 bg-[#1a4731]/20 mix-blend-multiply z-10 pointer-events-none group-hover:opacity-0 transition-opacity" />
+                                    <img
+                                        src={item.image}
+                                        alt={item.title}
+                                        className="w-full h-full object-cover grayscale brightness-90 contrast-125 group-hover:grayscale-0 group-hover:brightness-100 group-hover:contrast-100 transition-all duration-500"
+                                    />
+                                </div>
+                                <div className="px-2">
+                                    <h3 className="font-black text-xl text-black leading-none uppercase mb-2 tracking-tighter">{item.title}</h3>
+                                    <div className="flex items-center gap-2">
+                                        <div className="h-px flex-1 bg-black/10" />
+                                        <p className="font-mono text-[9px] text-gray-400 uppercase tracking-widest leading-tight italic">{item.desc}</p>
+                                    </div>
+                                </div>
+                                <div className="absolute bottom-4 right-4 text-black/10 group-hover:text-black/30 transition-colors">
+                                    <Maximize2 size={14} />
                                 </div>
                             </div>
                         </motion.div>
                     ))}
 
-                    {/* Elemen Mengambang */}
-                    <div className="absolute top-1/4 left-10 hidden lg:block animate-bounce duration-[3000ms]">
-                        <Star className="text-purple-500 w-12 h-12" fill="currentColor" />
-                    </div>
-                    <div className="absolute bottom-1/3 right-20 hidden lg:block animate-pulse">
-                        <div className="text-8xl font-black text-white/5 rotate-90">CREATIVE</div>
-                    </div>
-                </div>
-            </section >
+                    {/* Sticker Sticker Tambahan (Draggable too!) */}
+                    <motion.div drag dragConstraints={boardRef} dragMomentum={false} className="absolute top-[35%] right-[25%] z-40 cursor-grab active:cursor-grabbing">
+                        <div className="w-20 h-20 bg-[#4ade80] rounded-full flex items-center justify-center text-black font-black text-xl border-4 border-black rotate-12 shadow-lg group">
+                            NEW!
+                        </div>
+                    </motion.div>
 
-            {/* CTA Footer */}
-            < footer className="border-t border-white/10 bg-[#0a0a0a] py-32 relative overflow-hidden" >
-                <div className="absolute inset-0 bg-purple-900/10"></div>
-                <div className="max-w-4xl mx-auto text-center relative z-10 px-6">
-                    <h2 className="text-5xl md:text-7xl font-black uppercase mb-8">
-                        Siap Bergabung <br /> dengan <span className="text-purple-500 underline decoration-4 underline-offset-8">Elite?</span>
-                    </h2>
-                    <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
-                        Jangan cuma jadi penonton. Jadilah bagian dari 700+ kreator yang mengubah wajah industri kreatif Indonesia.
-                    </p>
-                    <button className="group relative px-12 py-6 bg-purple-600 overflow-hidden text-white font-black uppercase tracking-widest hover:bg-purple-500 transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(168,85,247,0.5)]">
-                        <span className="relative z-10 flex items-center gap-3 text-xl">
-                            GABUNG SEKARANG <ArrowUpRight size={24} />
-                        </span>
-                    </button>
-                </div>
+                    <motion.div drag dragConstraints={boardRef} dragMomentum={false} className="absolute bottom-[25%] left-[20%] z-40 cursor-grab active:cursor-grabbing">
+                        <div className="px-4 py-2 bg-yellow-300 text-black font-mono text-xs font-bold border-2 border-black -rotate-6 shadow-md">
+                            #WILD_GRAPHICS
+                        </div>
+                    </motion.div>
+                </section>
 
-                {/* Bilah Bawah */}
-                <div className="absolute bottom-0 left-0 w-full border-t border-white/5 py-4 px-6 flex justify-between items-center font-mono text-xs text-gray-600">
-                    <span>© 2025 OURCREATIVITY</span>
-                    <span>SISTEM: ONLINE</span>
-                </div>
-            </footer >
-        </div >
+                {/* CTA Footer - Dirancang seperti Poster ditempel */}
+                <footer className="pb-40 relative">
+                    <div className="max-w-4xl mx-auto px-6">
+                        <motion.div
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            className="bg-white text-black p-12 md:p-20 shadow-[20px_20px_0px_0px_rgba(0,0,0,0.5)] relative transform rotate-1"
+                        >
+                            {/* Selotip Sudut */}
+                            <div className="absolute -top-4 -left-10 w-40 h-10 bg-[#4ade80]/60 backdrop-blur-sm rotate-45 border-x border-black/5" />
+                            <div className="absolute -top-4 -right-10 w-40 h-10 bg-[#4ade80]/60 backdrop-blur-sm -rotate-45 border-x border-black/5" />
+
+                            <h2 className="text-5xl md:text-8xl font-black uppercase mb-8 leading-none italic underline decoration-[#4ade80]">
+                                JOIN <br /> THE WILD.
+                            </h2>
+                            <p className="text-xl text-gray-600 mb-12 max-w-2xl font-mono leading-tight">
+                                // JADILAH BAGIAN DARI 700+ KREATOR <br />
+                                // YANG MENGUBAH WAJAH INDUSTRI KREATIF INDONESIA.
+                            </p>
+
+                            <a href="https://discord.gg/ourcreativity" target="_blank" rel="noopener noreferrer"
+                                className="inline-flex items-center gap-4 px-12 py-6 bg-black text-white font-black text-2xl hover:bg-[#1a4731] transition-colors shadow-xl">
+                                GABUNG [ DISCORD ] <ArrowUpRight size={28} />
+                            </a>
+                        </motion.div>
+                    </div>
+
+                    {/* Credit Line Sticker */}
+                    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/60 backdrop-blur-md px-6 py-2 border border-white/10 text-[10px] font-mono whitespace-nowrap">
+                        <span>© 2025 OURCREATIVITY_V5</span>
+                        <span className="text-gray-500">|</span>
+                        <span>DEVELOPED_BY_ELITE_SYSTEMS</span>
+                        <span className="text-gray-500">|</span>
+                        <span className="text-[#4ade80]">SYSTEM: STABLE</span>
+                    </div>
+                </footer>
+            </div>
+        </div>
     );
 };
