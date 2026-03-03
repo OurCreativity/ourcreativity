@@ -44,10 +44,13 @@
     "react-hot-toast": "^2.6.0",
     "react-masonry-css": "^1.0.16",
     "react-router-dom": "^6.22.3",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "web-haptics": "^0.0.6"
   },
   "devDependencies": {
+    "@types/gsap": "^1.20.2",
     "@types/node": "^22.14.0",
+    "@types/react": "^19.2.14",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.22",
     "postcss": "^8.5.6",
