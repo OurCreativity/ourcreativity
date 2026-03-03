@@ -84,7 +84,7 @@ const Gate = () => {
     const lockBtn = useRef<HTMLButtonElement>(null);
 
     const [isUnlocked, setIsUnlocked] = useState(false);
-    const [isMaintenance] = useState(true); // Toggle this for maintenance
+    const [isMaintenance] = useState(false); // Turned off for production access
     const navigate = useNavigate();
 
     useGSAP(() => {
@@ -109,55 +109,66 @@ const Gate = () => {
 
         const tl = gsap.timeline();
 
-        // 1. Zoom into the lock (Impact)
+        // 1. Lock Interaction - Extreme Pull & Snap
         tl.to(lockBtn.current, {
-            scale: 1.5,
+            scale: 0.8,
             duration: 0.4,
-            ease: "power2.in"
+            ease: "back.in(2)",
         })
             .to(lockBtn.current, {
-                scale: 0,
+                scale: 3,
                 opacity: 0,
-                duration: 0.3,
-                ease: "power4.in"
+                duration: 0.6,
+                ease: "power4.out"
             })
 
-            // 2. 3D Gate Open Animation (Stepping in effect)
+            // 2. 3D Gate Open Animation - Deep Perspective Swing
             .to(gateLeft.current, {
-                rotateY: -110,
-                duration: 2,
-                ease: "power3.inOut"
-            }, "-=0.2")
-            .to(gateRight.current, {
-                rotateY: 110,
-                duration: 2,
-                ease: "power3.inOut"
-            }, "-=2")
-
-            // 3. Camera Move-In Effect (Scale up the background while doors open)
-            .to(".immersive-bg", {
-                scale: 1.2,
-                opacity: 1,
+                rotateY: -120,
+                x: "-10%",
+                scale: 1.1,
                 duration: 2.5,
-                ease: "power2.out"
-            }, "-=1.8")
+                ease: "expo.inOut"
+            }, "-=0.4")
+            .to(gateRight.current, {
+                rotateY: 120,
+                x: "10%",
+                scale: 1.1,
+                duration: 2.5,
+                ease: "expo.inOut"
+            }, "<")
 
-            // 4. Content Sequential Appearance (The Story)
+            // 3. Immersive Background - Slow Push In
+            .to(".immersive-bg", {
+                scale: 1.15,
+                opacity: 1,
+                duration: 3,
+                ease: "power2.out"
+            }, "-=2.2")
+
+            // 4. Staggered Content Appearance - Float up & Rotate
             .fromTo(".story-item",
                 {
-                    y: 40,
+                    y: 100,
                     opacity: 0,
-                    filter: "blur(10px)"
+                    rotationX: 15,
+                    scale: 0.9,
+                    transformOrigin: "bottom center"
                 },
                 {
                     y: 0,
                     opacity: 1,
-                    filter: "blur(0px)",
-                    duration: 1.2,
-                    stagger: 0.15,
-                    ease: "power4.out"
+                    rotationX: 0,
+                    scale: 1,
+                    duration: 1.5,
+                    stagger: {
+                        amount: 0.8,
+                        from: "start"
+                    },
+                    ease: "power4.out",
+                    clearProps: "all" // Clears GSAP inline styles after completion for hover effects
                 },
-                "-=1.2"
+                "-=1.5"
             );
     };
 

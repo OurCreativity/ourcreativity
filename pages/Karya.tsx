@@ -698,7 +698,7 @@ export const Karya = () => {
       {/* Grid Masonry Modern - Pinterest Style - SAMA (Gak berubah) */}
       {worksError ? (
         <FetchErrorState message={(worksError as any).message || 'Gagal memuat karya'} onRetry={() => setPage(1)} />
-      ) : (worksLoading || worksFetching) ? (
+      ) : worksLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {[...Array(12)].map((_, i) => (
             <div key={i} className="bg-white/[0.03] rounded-[2rem] overflow-hidden h-[400px] animate-pulse border border-white/5 shadow-lg">
