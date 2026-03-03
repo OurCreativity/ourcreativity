@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Code, Globe, Share2, Layers, GitBranch, Server, Database, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { MatrixRain, GlitchText } from '../../components/effects';
+import { useHaptic } from '../../hooks/useHaptic';
 
 // Data proyek
 const projects = [
@@ -34,18 +35,20 @@ const skillAreas = [
 ];
 
 export const Coding = () => {
+    const playHaptic = useHaptic();
+
     return (
         <div className="min-h-screen bg-[#050505] text-gray-300 font-sans selection:bg-emerald-500/30 overflow-x-hidden">
             <MatrixRain />
 
             {/* Navigasi Tetap (Sticky) */}
             <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center bg-[#050505]/80 backdrop-blur-md border-b border-white/5">
-                <Link to="/info" className="flex items-center text-gray-400 hover:text-emerald-500 transition-colors group">
+                <Link to="/info" onClick={() => playHaptic('light')} className="flex items-center text-gray-400 hover:text-emerald-500 transition-colors group">
                     <ArrowLeft size={18} className="mr-2 group-hover:-translate-x-1 transition-transform" />
                     <span className="text-xs font-mono font-bold tracking-widest">CD ..</span>
                 </Link>
                 <div className="flex items-center gap-4">
-                    <a href="https://github.com/OurCreativity" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs font-mono text-gray-400 hover:text-white transition-colors border border-white/10 hover:border-white/30 px-3 py-1.5 rounded bg-white/5 backdrop-blur-sm">
+                    <a href="https://github.com/OurCreativity" target="_blank" rel="noopener noreferrer" onClick={() => playHaptic('light')} className="flex items-center gap-2 text-xs font-mono text-gray-400 hover:text-white transition-colors border border-white/10 hover:border-white/30 px-3 py-1.5 rounded bg-white/5 backdrop-blur-sm">
                         <Code size={14} /> GitHub Org
                     </a>
                     <div className="flex items-center gap-2">
@@ -87,6 +90,7 @@ export const Coding = () => {
                         href="https://instagram.com/oc.edisicoding"
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => playHaptic('medium')}
                         className="inline-block px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-400 mb-10 tracking-[0.1em] uppercase hover:bg-emerald-500 hover:text-black transition-all duration-300 cursor-pointer rounded-sm"
                     >
                         CONNECT: @oc.edisicoding
@@ -250,6 +254,7 @@ export const Coding = () => {
                             href="https://github.com/OurCreativity"
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => playHaptic('light')}
                             className="bg-white/5 hover:bg-emerald-500/10 border border-white/10 hover:border-emerald-500/30 text-white hover:text-emerald-400 px-6 py-3 rounded-lg font-mono text-sm transition-all flex items-center gap-3 group backdrop-blur-sm"
                         >
                             VIEW IN GITHUB
@@ -301,6 +306,7 @@ export const Coding = () => {
                                                 href={project.link}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                onClick={() => playHaptic('light')}
                                                 className="flex items-center gap-2 text-sm font-mono text-emerald-500 opacity-60 group-hover:opacity-100 transition-opacity cursor-pointer hover:underline underline-offset-4"
                                             >
                                                 <span>Visit Repo</span>
@@ -312,6 +318,30 @@ export const Coding = () => {
                             </motion.div>
                         ))}
                     </div>
+
+                    {/* CTA Section */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="mt-32 text-center p-12 md:p-20 bg-[#0a0a0a] border border-white/5 rounded-2xl relative overflow-hidden group"
+                    >
+                        <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                        <h2 className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tighter">SIAP BERKONTRIBUSI?</h2>
+                        <p className="text-gray-400 max-w-xl mx-auto mb-12 font-light">
+                            Jadilah bagian dari tim elit yang mendesain masa depan arsitektur digital komunitas kami. No room for average.
+                        </p>
+                        <a
+                            href="https://forms.gle/koA7J9giDqtokfBq7"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => playHaptic('heavy')}
+                            className="inline-flex items-center gap-4 px-10 py-5 bg-emerald-500 text-black font-black uppercase tracking-widest text-lg md:text-xl rounded-sm hover:scale-110 active:scale-95 transition-all shadow-[0_0_30px_rgba(16,185,129,0.3)]"
+                        >
+                            JOIN THE ARCHITECTURE
+                            <Code size={24} />
+                        </a>
+                    </motion.div>
                 </div>
             </section>
             {/* SEKSI 5: STATS FOOTER */}

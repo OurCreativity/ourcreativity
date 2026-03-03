@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Share2, Zap, Heart, Camera, MessageSquare } from 'lucide-react';
+import { useHaptic } from '../../hooks/useHaptic';
 
 export const Meme = () => {
+    const playHaptic = useHaptic();
     return (
         <div className="min-h-screen bg-black text-white selection:bg-rose-500 selection:text-white overflow-x-hidden">
             {/* Muat Font Biar Estetik */}
@@ -40,6 +42,7 @@ export const Meme = () => {
                 <div className="mb-16">
                     <Link
                         to="/info"
+                        onClick={() => playHaptic('light')}
                         className="inline-flex items-center gap-2 font-pixel text-2xl text-zinc-400 hover:text-white transition-colors"
                     >
                         <ArrowLeft className="w-6 h-6" />
@@ -134,9 +137,10 @@ export const Meme = () => {
                     </h2>
 
                     <a
-                        href="https://www.instagram.com/ocedisimeme.id"
+                        href="https://chat.whatsapp.com/BVTsqKqYa9UL2CykAsMmJZ"
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => playHaptic('medium')}
                         className="inline-flex items-center gap-3 md:gap-4 bg-white text-black font-meme text-2xl md:text-3xl px-8 md:px-12 py-3 md:py-5 rounded-full hover:bg-rose-500 hover:text-white transition-all transform hover:scale-110 active:scale-95 shadow-2xl"
                     >
                         <Share2 className="w-6 h-6 md:w-8 md:h-8" />

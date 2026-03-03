@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowLeft, Crosshair, Users, Trophy, Zap, Star, ArrowUpRight, ShieldAlert, Sparkles } from 'lucide-react';
+import { useHaptic } from '../../hooks/useHaptic';
 
 // --- Komponen Marquee Lokal ---
 const Marquee = ({ text, reverse = false }: { text: string, reverse?: boolean }) => (
@@ -69,6 +70,7 @@ const highlights = [
 export const Graphics = () => {
     const { scrollYProgress } = useScroll();
     const yHero = useTransform(scrollYProgress, [0, 1], [0, 200]);
+    const playHaptic = useHaptic();
 
     return (
         <div className="min-h-screen bg-[#f0f0f0] text-black font-sans selection:bg-black selection:text-[#f0f0f0] overflow-x-hidden relative">
@@ -77,7 +79,7 @@ export const Graphics = () => {
 
             {/* Navigasi Mengambang */}
             <nav className="fixed top-6 left-0 right-0 z-50 px-6 md:px-12 flex justify-between items-start pointer-events-none">
-                <Link to="/info" className="flex items-center gap-2 text-sm font-bold border-2 border-black hover:bg-black hover:text-white transition-all bg-white px-5 py-2.5 rounded-none shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 pointer-events-auto uppercase tracking-wider">
+                <Link to="/info" onClick={() => playHaptic('light')} className="flex items-center gap-2 text-sm font-bold border-2 border-black hover:bg-black hover:text-white transition-all bg-white px-5 py-2.5 rounded-none shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 pointer-events-auto uppercase tracking-wider">
                     <ArrowLeft size={16} strokeWidth={3} /> KEMBALI
                 </Link>
                 <div className="hidden md:flex flex-col items-end gap-2 pointer-events-auto">
@@ -116,6 +118,7 @@ export const Graphics = () => {
                                     href="https://instagram.com/ocdesaingrafis"
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    onClick={() => playHaptic('light')}
                                     className="font-bold text-black text-sm mt-3 tracking-widest hover:text-purple-600 transition-colors cursor-pointer flex items-center gap-2"
                                 >
                                     @ocdesaingrafis <ArrowUpRight size={14} />
@@ -185,59 +188,84 @@ export const Graphics = () => {
                 </div>
             </section>
 
-            {/* Galeri Kolase Tersebar */}
-            <section className="py-32 px-6 overflow-hidden relative bg-[#f0f0f0] border-b-4 border-black">
-                {/* Background Grid Accent */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.05)_2px,transparent_2px),linear-gradient(90deg,rgba(0,0,0,0.05)_2px,transparent_2px)] bg-[size:100px_100px] [background-position:center_center]"></div>
+            {/* Galeri Papan Investigasi */}
+            <section className="py-24 md:py-32 px-6 overflow-hidden relative bg-[#121212] border-b-4 border-black border-t-8 border-t-red-600">
+                {/* Background Corkboard/Gritty effect */}
+                <div className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/black-paper.png')] z-0"></div>
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_2px,transparent_2px),linear-gradient(90deg,rgba(255,255,255,0.02)_2px,transparent_2px)] bg-[size:50px_50px] [background-position:center_center] z-0"></div>
 
-                <div className="flex flex-col items-center justify-center mb-24 relative z-10">
-                    <div className="bg-black text-white px-8 py-4 border-4 border-black transform -rotate-1 shadow-[8px_8px_0_0_rgba(168,85,247,1)] inline-block mb-6">
-                        <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter text-center">
-                            GALERI <span className="text-purple-400">KEKACAAN</span>
+                <div className="flex flex-col items-center justify-center mb-16 relative z-10">
+                    <div className="bg-red-600 text-white px-8 py-3 transform -rotate-2 shadow-[8px_8px_0_0_rgba(0,0,0,1)] inline-block mb-4 border-2 border-black">
+                        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-widest text-center flex items-center gap-4">
+                            <Crosshair size={36} className="animate-pulse" /> CASE FILES <Crosshair size={36} className="animate-pulse" />
                         </h2>
                     </div>
-                    <p className="font-bold text-xl uppercase tracking-widest bg-yellow-400 border-2 border-black px-4 py-1 rotate-2">DOKUMENTASI KARYA</p>
+                    <p className="font-bold text-lg text-white uppercase tracking-widest bg-black border border-white/20 px-4 py-1 rotate-1 shadow-[4px_4px_0_0_rgba(220,38,38,0.5)]">TARGET: GRAFIS_01 // CLASSIFIED</p>
                 </div>
 
-                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 relative min-h-[800px] z-10">
-                    {highlights.map((item, i) => (
-                        <motion.div
-                            key={i}
-                            initial={{ opacity: 0, scale: 0.8, rotate: 0, y: 50 }}
-                            whileInView={{ opacity: 1, scale: 1, rotate: item.rotate, y: 0 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.6, delay: i * 0.1, type: "spring", stiffness: 100 }}
-                            className={`relative group ${item.margin} ${item.zIndex}`}
-                        >
-                            <div className={`relative aspect-[3/4] bg-white border-4 border-black p-3 shadow-[12px_12px_0_0_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-3 hover:translate-y-3 transition-all duration-300`}>
-                                {/* Top colored bar */}
-                                <div className={`h-8 w-full ${item.color} border-b-4 border-black mb-3 flex items-center px-2 justify-between`}>
-                                    <div className="flex gap-1">
-                                        <div className="w-3 h-3 bg-white border border-black rounded-full"></div>
-                                        <div className="w-3 h-3 bg-white border border-black rounded-full"></div>
+                <div className="max-w-6xl mx-auto relative z-10 min-h-[800px] flex items-center justify-center">
+
+                    {/* SVG Red Strings for Desktop (Hidden on Mobile) */}
+                    <svg className="absolute inset-0 w-full h-full z-0 hidden md:block pointer-events-none" style={{ filter: 'drop-shadow(0 4px 4px rgba(0,0,0,0.8))' }}>
+                        {/* Line from Item 1 to Item 2 */}
+                        <line x1="25%" y1="20%" x2="75%" y2="25%" stroke="#dc2626" strokeWidth="4" strokeDasharray="8,4" />
+                        {/* Line from Item 1 to Item 3 */}
+                        <line x1="25%" y1="20%" x2="30%" y2="75%" stroke="#dc2626" strokeWidth="3" />
+                        {/* Line from Item 2 to Item 4 */}
+                        <line x1="75%" y1="25%" x2="70%" y2="80%" stroke="#dc2626" strokeWidth="4" />
+                        {/* Line from Item 3 to Item 4 */}
+                        <line x1="30%" y1="75%" x2="70%" y2="80%" stroke="#dc2626" strokeWidth="3" strokeDasharray="12,6" />
+                        {/* Cross Line */}
+                        <line x1="25%" y1="20%" x2="70%" y2="80%" stroke="#dc2626" strokeWidth="2" opacity="0.6" />
+                    </svg>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 relative w-full">
+                        {highlights.map((item, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
+                                whileInView={{ opacity: 1, scale: 1, rotate: item.rotate }}
+                                viewport={{ once: true, margin: "-100px" }}
+                                transition={{ duration: 0.6, delay: i * 0.1, type: "spring", stiffness: 100 }}
+                                onMouseEnter={() => playHaptic('light')}
+                                className={`relative group ${item.margin}`}
+                            >
+                                <div className={`relative aspect-[4/3] bg-[#fdfbf7] p-4 pb-12 shadow-[12px_12px_20px_0_rgba(0,0,0,0.6)] hover:shadow-[16px_16px_30px_0_rgba(0,0,0,0.8)] hover:-translate-y-2 transition-all duration-300 border border-gray-200`}>
+
+                                    {/* Push Pin */}
+                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 z-30">
+                                        <div className="w-6 h-6 rounded-full bg-red-600 border border-red-800 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.5),2px_4px_6px_rgba(0,0,0,0.6)] mx-auto relative">
+                                            <div className="absolute top-1 left-1 w-2 h-2 rounded-full bg-red-400 opacity-60"></div>
+                                        </div>
+                                        {/* Pin Shadow */}
+                                        <div className="w-1 h-3 bg-black/40 mx-auto -mt-1 skew-x-12 blur-[1px]"></div>
                                     </div>
-                                    <span className="text-black font-black text-xs">IMG_{i + 1}</span>
-                                </div>
 
-                                <div className="h-[calc(100%-44px)] relative overflow-hidden border-2 border-black">
-                                    <div className="absolute inset-0 bg-purple-500/20 mix-blend-multiply z-10 pointer-events-none group-hover:bg-transparent transition-colors"></div>
-                                    <img
-                                        src={item.image}
-                                        alt={item.title}
-                                        className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
-                                    />
-
-                                    <div className="absolute inset-x-0 bottom-0 bg-black p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                                        <h3 className="font-black text-xl uppercase text-white mb-1 leading-tight">{item.title}</h3>
-                                        <p className="text-xs font-bold text-gray-400">{item.desc}</p>
+                                    <div className="h-full w-full relative overflow-hidden border border-gray-300">
+                                        <div className="absolute inset-0 bg-yellow-900/10 mix-blend-multiply z-10 pointer-events-none group-hover:bg-transparent transition-colors"></div>
+                                        <img
+                                            src={item.image}
+                                            alt={item.title}
+                                            className="w-full h-full object-cover filter sepia-[0.2] contrast-125 brightness-90 group-hover:sepia-0 group-hover:scale-105 transition-all duration-700"
+                                        />
                                     </div>
-                                </div>
 
-                                {/* Efek Selotip (Miring) */}
-                                <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-8 bg-[#e3e3e3] border-2 border-gray-300 rotate-[-4deg] opacity-80 mix-blend-multiply"></div>
-                            </div>
-                        </motion.div>
-                    ))}
+                                    <div className="absolute bottom-3 left-4 right-4 flex justify-between items-end flex-wrap gap-2">
+                                        <div>
+                                            <h3 className="font-black text-lg md:text-xl uppercase text-black leading-none font-mono tracking-tighter">{item.title}</h3>
+                                            <p className="text-xs font-bold text-red-600 mt-1 uppercase font-mono">{item.desc}</p>
+                                        </div>
+                                        <div className="text-[10px] font-bold border border-black px-2 py-0.5 text-black">FILE_{i + 1}</div>
+                                    </div>
+
+                                    {/* Random Tape */}
+                                    {i % 2 === 0 && (
+                                        <div className="absolute -left-4 top-10 w-16 h-6 bg-white/40 border-2 border-white/50 rotate-[-15deg] backdrop-blur-sm shadow-sm mix-blend-screen"></div>
+                                    )}
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </section>
 
@@ -266,11 +294,13 @@ export const Graphics = () => {
                         </div>
 
                         <div>
-                            <button className="group relative px-12 py-6 bg-black text-white font-black uppercase tracking-widest text-2xl border-4 border-transparent hover:border-white transition-all transform hover:-translate-y-2 hover:rotate-1 shadow-[12px_12px_0_0_rgba(255,255,255,1)] hover:shadow-none hover:bg-white hover:text-black">
-                                <span className="flex items-center gap-4">
-                                    BERGABUNG <ArrowUpRight size={32} className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform" />
-                                </span>
-                            </button>
+                            <a href="https://forms.gle/d1SBHkeCWdDfYLGHA" target="_blank" rel="noopener noreferrer">
+                                <button onClick={() => playHaptic('heavy')} className="group relative px-12 py-6 bg-black text-white font-black uppercase tracking-widest text-2xl border-4 border-transparent hover:border-white transition-all transform hover:-translate-y-2 hover:rotate-1 shadow-[12px_12px_0_0_rgba(255,255,255,1)] hover:shadow-none hover:bg-white hover:text-black">
+                                    <span className="flex items-center gap-4">
+                                        BERGABUNG <ArrowUpRight size={32} className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform" />
+                                    </span>
+                                </button>
+                            </a>
                         </div>
                     </motion.div>
                 </div>
