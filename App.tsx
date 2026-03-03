@@ -129,6 +129,28 @@ const AnimatedRoutes = () => {
   );
 };
 
+import { useWebHaptics } from 'web-haptics/react';
+
+const GlobalHaptics = () => {
+  const { trigger } = useWebHaptics();
+
+  useEffect(() => {
+    const handleCaptureClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      if (target.closest('button') || target.closest('a')) {
+        trigger();
+      }
+    };
+
+    // Use capture phase to ensure it detects clicks even ifstopPropagation is used
+    document.addEventListener('click', handleCaptureClick, true);
+    return () => document.removeEventListener('click', handleCaptureClick, true);
+  }, [trigger]);
+
+  return null;
+};
+
 const AppContent = () => {
   const { pathname } = useLocation();
   const isStudio = pathname.toLowerCase() === '/studio';
@@ -137,6 +159,7 @@ const AppContent = () => {
 
   return (
     <div className="min-h-screen bg-[#030303] text-white selection:bg-rose-500/30 font-sans overflow-x-hidden flex flex-col relative">
+      <GlobalHaptics />
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         {/* Efek noise tekstur */}
         <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `url("https://grainy-gradients.vercel.app/noise.svg")`, backgroundSize: '100px 100px' }}></div>

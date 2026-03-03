@@ -12,6 +12,7 @@ import {
     workGallery, stats, menuItems, projectFolders,
     activeEffects, editingTags, vfxTags, colorPalette
 } from '../../data/videoPageData';
+import { useHaptic } from '../../hooks/useHaptic';
 
 export const VideoPage = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -21,6 +22,7 @@ export const VideoPage = () => {
     });
 
     const [isPlaying, setIsPlaying] = useState(false);
+    const playHaptic = useHaptic();
 
     // --- Animation Transforms (Expanded for More Slides) ---
     // Total Height: 1000vh approx to accommodate steps
@@ -55,58 +57,65 @@ export const VideoPage = () => {
     const timelineWidth = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "100%"]), { stiffness: 100, damping: 30 });
 
     return (
-        <div ref={containerRef} className="h-[1000vh] bg-[#1a1a1a] text-xs text-[#ddd] font-sans selection:bg-orange-500 overflow-hidden">
+        <div ref={containerRef} className="h-[1000vh] bg-[#050505] text-xs text-gray-300 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-hidden relative">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(14,165,233,0.15),_transparent_50%)] pointer-events-none"></div>
 
-            <div className="fixed inset-0 z-10 flex flex-col bg-[#121212]">
+            <div className="fixed inset-0 z-10 flex flex-col bg-transparent">
 
                 {/* --- HEADER --- */}
-                <div className="h-10 bg-[#1f1f1f] border-b border-[#000] flex items-center justify-between px-4 shrink-0 shadow-sm z-50">
+                <div className="h-14 bg-black/60 backdrop-blur-xl border-b border-white/10 flex items-center justify-between px-6 shrink-0 z-50">
                     <div className="flex items-center gap-6">
-                        <Link to="/info" className="flex items-center gap-2 font-bold text-gray-300 hover:text-white transition-colors">
-                            <ArrowLeft size={14} />
-                            <span className="hidden sm:inline">Our Creativity<span className="text-orange-500">.prproj</span></span>
+                        <Link to="/info" className="flex items-center gap-2 font-bold text-gray-400 hover:text-white transition-colors">
+                            <ArrowLeft size={16} />
+                            <span className="hidden sm:inline tracking-wider">Our Creativity<span className="text-cyan-500 font-mono text-[10px] ml-1">.OCVP</span></span>
                         </Link>
-                        <div className="hidden lg:flex gap-4 text-[#888]">
+                        <div className="hidden lg:flex gap-6 text-gray-500 text-xs font-medium">
                             {menuItems.map(m => (
                                 <span key={m} className="hover:text-white cursor-pointer transition-colors">{m}</span>
                             ))}
                         </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                        <div className="h-5 w-[1px] bg-gray-800"></div>
-                        <Timecode scrollProgress={scrollYProgress} />
-                        <button className="flex items-center gap-2 bg-[#2a2a2a] hover:bg-[#333] px-3 py-1 rounded text-orange-500 border border-orange-500/20 ml-2">
-                            <Download size={12} />
-                            <span className="font-bold">EKSPOR</span>
-                        </button>
+                    <div className="flex items-center gap-6">
+                        <div className="h-6 w-[1px] bg-white/10"></div>
+                        <div className="font-mono text-cyan-400 tracking-widest bg-cyan-950/30 px-3 py-1 rounded border border-cyan-500/20 shadow-[inset_0_0_10px_rgba(6,182,212,0.1)]">
+                            <Timecode scrollProgress={scrollYProgress} />
+                        </div>
+                        <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => playHaptic('heavy')}
+                            className="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-1.5 rounded-md text-cyan-400 border border-white/10 transition-all hover:border-cyan-500/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+                        >
+                            <Download size={14} />
+                            <span className="font-bold tracking-widest text-[10px]">RENDER</span>
+                        </motion.button>
                     </div>
                 </div>
 
                 {/* --- WORKSPACE --- */}
-                <div className="flex-1 flex overflow-hidden">
+                <div className="flex-1 flex overflow-hidden bg-black/20">
 
                     {/* LEFT BIN (Browser Media) */}
-                    <div className="hidden md:flex w-[20%] min-w-[240px] flex-col border-r border-[#000] bg-[#1a1a1a]">
-                        <div className="flex bg-[#1f1f1f] border-b border-[#000]">
-                            <div className="px-3 py-1.5 bg-[#2a2a2a] text-[#eee] border-t-2 border-orange-500 text-[11px] font-bold">Proyek</div>
-                            <div className="px-3 py-1.5 text-[#888] text-[11px]">Peramban Media</div>
+                    <div className="hidden lg:flex w-56 xl:w-64 flex-col border-r border-white/10 bg-black/40 backdrop-blur-md">
+                        <div className="flex bg-white/5 border-b border-white/10">
+                            <div className="px-4 py-2 bg-white/10 text-white border-t-2 border-cyan-500 text-[10px] uppercase tracking-widest font-bold">Proyek</div>
+                            <div className="px-4 py-2 text-gray-500 text-[10px] uppercase tracking-widest hover:text-gray-300 cursor-pointer">Peramban</div>
                         </div>
-                        <div className="flex-1 p-2 overflow-y-auto custom-scrollbar space-y-4">
-                            <div className="grid grid-cols-2 gap-2">
+                        <div className="flex-1 p-3 overflow-y-auto custom-scrollbar space-y-6">
+                            <div className="grid grid-cols-2 gap-3">
                                 {projectFolders.map(f => (
-                                    <div key={f} className="aspect-square bg-[#111] border border-[#333] rounded hover:border-orange-500 flex flex-col items-center justify-center p-2 text-gray-600 group cursor-pointer transition-colors">
-                                        <Hash size={20} className="group-hover:text-orange-500 transition-colors" />
-                                        <span className="text-[9px] mt-1 text-center font-medium group-hover:text-gray-300">{f}</span>
+                                    <div key={f} className="aspect-square bg-white/5 border border-white/10 rounded-lg hover:border-cyan-500/50 flex flex-col items-center justify-center p-2 text-gray-500 group cursor-pointer transition-all hover:bg-cyan-950/20 shadow-[inset_0_0_15px_rgba(255,255,255,0.02)]">
+                                        <Layers size={24} className="group-hover:text-cyan-400 transition-colors mb-2" strokeWidth={1.5} />
+                                        <span className="text-[10px] text-center font-medium group-hover:text-gray-200 tracking-wide">{f}</span>
                                     </div>
                                 ))}
                             </div>
-                            <div className="border-t border-[#333] pt-2">
-                                <div className="text-[10px] font-bold text-gray-500 mb-2 uppercase">Aset Terbaru</div>
+                            <div className="border-t border-white/10 pt-4">
+                                <div className="text-[10px] font-bold text-gray-600 mb-3 tracking-[0.2em] uppercase">Aset Diimpor</div>
                                 <div className="space-y-1">
                                     {workGallery.map((v, i) => (
-                                        <div key={i} className="flex items-center gap-2 p-1.5 hover:bg-[#2a2a2a] rounded cursor-pointer group transition-colors">
-                                            <Film size={12} className="text-blue-500" />
-                                            <span className="text-gray-400 group-hover:text-gray-200 truncate font-mono text-[10px]">{v.title}_FINAL.mp4</span>
+                                        <div key={i} className="flex items-center gap-3 p-2 hover:bg-white/5 rounded-md cursor-pointer group transition-colors">
+                                            <Film size={14} className="text-gray-600 group-hover:text-cyan-400 transition-colors" />
+                                            <span className="text-gray-500 group-hover:text-gray-200 truncate font-mono text-[10px] tracking-wide">{v.title}_FINAL.mp4</span>
                                         </div>
                                     ))}
                                 </div>
@@ -115,25 +124,33 @@ export const VideoPage = () => {
                     </div>
 
                     {/* CENTER MONITOR (Program) */}
-                    <div className="flex-1 flex flex-col min-w-0 bg-[#0f0f0f]">
-                        <div className="h-8 bg-[#1f1f1f] border-b border-[#000] flex items-center justify-between px-2 text-[#888] text-[10px]">
+                    <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
+                        <div className="h-10 bg-white/5 border-b border-white/10 flex items-center justify-between px-4 text-gray-400 text-[10px] uppercase tracking-widest font-mono">
                             <div className="flex items-center gap-1">
-                                <div className="px-3 py-1 bg-[#2a2a2a] text-orange-500 border-t-2 border-orange-500 font-bold">Program: Tampilan_Utama</div>
+                                <div className="px-4 py-1.5 bg-white/10 text-cyan-400 border-t-2 border-cyan-500 font-bold rounded-t-sm">Program: Komposisi_Utama</div>
                             </div>
-                            <span>1920 x 1080 (1.0) - FIT</span>
+                            <span className="opacity-50">1920x1080 • Apple ProRes 422</span>
                         </div>
 
                         {/* SCREENBOX */}
-                        <div className="flex-1 flex items-center justify-center p-4 md:p-8 relative overflow-hidden bg-[#151515]">
+                        <div className="flex-1 flex items-center justify-center p-2 sm:p-6 md:p-8 relative overflow-hidden bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.02)_0%,_transparent_100%)]">
 
-                            <div className="aspect-video w-full max-h-full bg-black shadow-2xl relative overflow-hidden border border-[#333] group">
+                            <motion.div
+                                animate={{
+                                    y: [0, -4, 0],
+                                    rotateX: [0, 0.5, 0],
+                                    rotateY: [0, -0.5, 0]
+                                }}
+                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                                className="aspect-video w-full max-w-6xl max-h-full bg-black shadow-[0_0_100px_-15px_rgba(6,182,212,0.2)] rounded-xl relative overflow-hidden border border-white/10 ring-1 ring-white/5 group hover:shadow-[0_0_140px_-10px_rgba(6,182,212,0.25)] transition-shadow duration-700 perspective-[2000px]"
+                            >
 
                                 {/* Overlay Batas Aman (Sembunyi default, muncul pas hover/play) */}
-                                <div className="absolute inset-[5%] border border-cyan-500/20 pointer-events-none z-[60] opacity-50"></div>
-                                <div className="absolute inset-[10%] border border-cyan-500/20 pointer-events-none z-[60] opacity-30"></div>
-                                <div className="absolute top-4 right-4 flex gap-2 z-[60]">
-                                    <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                                    <span className="text-[8px] font-black text-red-500 tracking-widest">REKAM</span>
+                                <div className="absolute inset-[5%] border border-cyan-500/20 pointer-events-none z-[60] opacity-30"></div>
+                                <div className="absolute inset-[10%] border border-cyan-500/20 pointer-events-none z-[60] opacity-20"></div>
+                                <div className="absolute top-6 right-6 flex gap-3 z-[60] items-center bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+                                    <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-pulse"></div>
+                                    <span className="text-[10px] font-bold text-gray-200 tracking-widest font-mono">REC</span>
                                 </div>
 
                                 {/* --- SCENES --- */}
@@ -339,134 +356,177 @@ export const VideoPage = () => {
                                 </motion.div>
 
                                 {/* 8. Aksi (CTA) */}
-                                <motion.div style={{ opacity: ctaOpacity }} className="absolute inset-0 z-50 bg-[#000] flex flex-col items-center justify-center">
+                                <motion.div style={{ opacity: ctaOpacity }} className="absolute inset-0 z-50 bg-[#050505] flex flex-col items-center justify-center">
                                     <motion.div
                                         initial={{ scale: 0.9 }}
                                         whileInView={{ scale: 1 }}
                                         className="text-center px-4"
                                     >
-                                        <h2 className="text-5xl md:text-8xl font-black text-white mb-6 uppercase leading-none">
-                                            Gabung <br /><span className="text-orange-500">Yuk!</span>
+                                        <h2 className="text-5xl md:text-8xl font-black text-white mb-6 uppercase leading-[0.9] tracking-tighter">
+                                            Roll <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Action!</span>
                                         </h2>
-                                        <p className="text-gray-500 text-sm tracking-widest uppercase mb-10">Mulai petualangan kreatifmu bareng kita.</p>
-                                        <button className="bg-orange-500 text-black px-12 py-5 font-black text-xl rounded hover:bg-white hover:scale-105 transition-all shadow-[0_0_30px_rgba(249,115,22,0.4)]">
-                                            DAFTAR SEKARANG
-                                        </button>
+                                        <p className="text-gray-400 text-xs tracking-[0.3em] uppercase mb-10 font-mono">Output siap dirender.</p>
+                                        <a href="https://forms.gle/RZJgCeZWgBQF8DDd8" target="_blank" rel="noopener noreferrer">
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                onClick={() => playHaptic('medium')}
+                                                className="bg-white text-black px-12 py-5 font-black text-sm uppercase tracking-widest rounded-full hover:bg-cyan-400 transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_50px_rgba(6,182,212,0.4)]"
+                                            >
+                                                GABUNG SEKARANG
+                                            </motion.button>
+                                        </a>
                                     </motion.div>
                                 </motion.div>
 
-                            </div>
-                        </div>
-
-                        {/* NAV CONTROLS */}
-                        <div className="h-10 bg-[#1f1f1f] border-t border-[#000] flex items-center justify-between px-4 shrink-0">
-                            <div className="flex items-center gap-4">
-                                <SkipBack size={16} className="text-[#666] cursor-pointer hover:text-white" />
-                                <div
-                                    className={`w-8 h-6 rounded flex items-center justify-center cursor-pointer transition-colors ${isPlaying ? 'bg-orange-500 text-black' : 'bg-[#333] text-[#888] hover:bg-gray-600'}`}
-                                    onClick={() => setIsPlaying(!isPlaying)}
-                                >
-                                    <Play size={12} fill={isPlaying ? "currentColor" : "none"} />
-                                </div>
-                                <SkipForward size={16} className="text-[#666] cursor-pointer hover:text-white" />
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <div className="text-[10px] text-gray-500 bg-[#111] px-2 py-0.5 rounded border border-[#333]">SESUAI</div>
-                                <Settings size={14} className="text-[#666]" />
-                                <Maximize2 size={14} className="text-[#666]" />
-                            </div>
+                            </motion.div>
                         </div>
                     </div>
 
-                    {/* RIGHT INSPECTOR */}
-                    <div className="hidden xl:flex w-[20%] min-w-[240px] flex-col border-l border-[#000] bg-[#1a1a1a]">
-                        <div className="flex bg-[#1f1f1f] border-b border-[#000]">
-                            <div className="px-3 py-1.5 bg-[#2a2a2a] text-[#eee] border-t-2 border-orange-500 text-[11px] font-bold">Kontrol Efek</div>
-                            <div className="px-3 py-1.5 text-[#888] text-[11px]">Warna Lumetri</div>
+                    {/* NAV CONTROLS */}
+                    <div className="h-12 bg-black/40 backdrop-blur-md border-t border-white/10 flex items-center justify-between px-3 sm:px-6 shrink-0 relative z-50">
+                        <div className="flex items-center gap-4 sm:gap-6">
+                            <motion.div whileTap={{ scale: 0.9 }} onClick={() => playHaptic('light')}>
+                                <SkipBack size={18} className="text-gray-500 cursor-pointer hover:text-cyan-400 transition-colors" />
+                            </motion.div>
+                            <motion.div
+                                whileTap={{ scale: 0.9 }}
+                                className={`w-10 sm:w-12 h-8 rounded-md flex items-center justify-center cursor-pointer transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)] ${isPlaying ? 'bg-cyan-500 text-black shadow-[0_0_20px_rgba(6,182,212,0.4)]' : 'bg-white/10 text-gray-400 hover:bg-white/20 hover:text-white'}`}
+                                onClick={() => {
+                                    setIsPlaying(!isPlaying);
+                                    playHaptic('medium');
+                                }}
+                            >
+                                <Play size={16} fill={isPlaying ? "currentColor" : "none"} className={isPlaying ? "ml-1" : ""} />
+                            </motion.div>
+                            <motion.div whileTap={{ scale: 0.9 }} onClick={() => playHaptic('light')}>
+                                <SkipForward size={18} className="text-gray-500 cursor-pointer hover:text-cyan-400 transition-colors" />
+                            </motion.div>
                         </div>
-                        <div className="p-4 space-y-6">
-                            <div className="space-y-4">
-                                <div className="text-[10px] font-bold text-gray-500 uppercase">Parameter Video</div>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-[10px] text-gray-400">Posisi</span>
-                                        <span className="text-[10px] text-blue-400 font-mono">960, 540</span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-[10px] text-gray-400">Skala</span>
-                                        <span className="text-[10px] text-blue-400 font-mono">
-                                            <motion.span>{useTransform(scrollYProgress, [0, 1], [100.0, 120.0]).get()?.toFixed(1)}</motion.span>
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-[10px] text-gray-400">Rotasi</span>
-                                        <span className="text-[10px] text-blue-400 font-mono">0.0</span>
+                        <div className="flex items-center gap-3 sm:gap-4">
+                            <div className="hidden sm:block text-[10px] text-cyan-400 font-mono bg-cyan-950/30 px-3 py-1 rounded border border-cyan-500/20">FIT • 100%</div>
+                            <motion.div whileTap={{ scale: 0.9 }} onClick={() => playHaptic('light')}>
+                                <Settings size={16} className="text-gray-500 hover:text-gray-300 cursor-pointer transition-colors" />
+                            </motion.div>
+                            <motion.div whileTap={{ scale: 0.9 }} onClick={() => playHaptic('light')}>
+                                <Maximize2 size={16} className="text-gray-500 hover:text-gray-300 cursor-pointer transition-colors" />
+                            </motion.div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* RIGHT INSPECTOR */}
+                <div className="hidden xl:flex w-64 flex-col border-l border-white/10 bg-black/40 backdrop-blur-md">
+                    <div className="flex bg-white/5 border-b border-white/10">
+                        <div className="px-4 py-2 bg-white/10 text-white border-t-2 border-cyan-500 text-[10px] uppercase tracking-widest font-bold">Kontrol Efek</div>
+                        <div className="px-4 py-2 text-gray-500 text-[10px] uppercase tracking-widest hover:text-gray-300 cursor-pointer">Lumetri</div>
+                    </div>
+                    <div className="p-5 space-y-8">
+                        <div className="space-y-4">
+                            <div className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em]">Transformasi Video</div>
+                            <div className="space-y-3">
+                                <div className="flex justify-between items-center group cursor-text">
+                                    <span className="text-[10px] text-gray-500 group-hover:text-gray-300 transition-colors">Posisi</span>
+                                    <div className="flex gap-2">
+                                        <span className="text-[10px] text-cyan-400 font-mono bg-black/50 px-2 py-1 rounded border border-white/5">960.0</span>
+                                        <span className="text-[10px] text-cyan-400 font-mono bg-black/50 px-2 py-1 rounded border border-white/5">540.0</span>
                                     </div>
                                 </div>
+                                <div className="flex justify-between items-center group cursor-text">
+                                    <span className="text-[10px] text-gray-500 group-hover:text-gray-300 transition-colors">Skala</span>
+                                    <span className="text-[10px] text-cyan-400 font-mono bg-black/50 px-2 py-1 rounded border border-white/5">
+                                        <motion.span>{useTransform(scrollYProgress, [0, 1], [100.0, 120.0]).get()?.toFixed(1)}</motion.span>%
+                                    </span>
+                                </div>
+                                <div className="flex justify-between items-center group cursor-text">
+                                    <span className="text-[10px] text-gray-500 group-hover:text-gray-300 transition-colors">Rotasi</span>
+                                    <span className="text-[10px] text-cyan-400 font-mono bg-black/50 px-2 py-1 rounded border border-white/5">0.0°</span>
+                                </div>
                             </div>
-                            <div className="border-t border-[#333] pt-4 space-y-4">
-                                <div className="text-[10px] font-bold text-gray-500 uppercase">Efek Aktif</div>
+                        </div>
+                        <div className="border-t border-white/10 pt-6 space-y-4">
+                            <div className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] flex justify-between items-center">
+                                Tumpukan Efek
+                                <div className="w-4 h-4 rounded bg-white/5 flex items-center justify-center hover:bg-white/20 cursor-pointer transition-colors">+</div>
+                            </div>
+                            <div className="space-y-2">
                                 {activeEffects.map(e => (
-                                    <div key={e.n} className="flex items-center justify-between p-2 bg-[#222] border border-[#333] rounded-sm">
-                                        <span className="text-[10px] text-gray-300">{e.n}</span>
-                                        <div className={`w-1.5 h-1.5 ${e.c} rounded-full`}></div>
+                                    <div key={e.n} className="flex items-center justify-between p-2.5 bg-black/30 border border-white/5 rounded-md hover:border-white/20 hover:bg-white/5 transition-all text-gray-400 group cursor-pointer">
+                                        <span className="text-[10px] font-medium tracking-wide group-hover:text-white transition-colors">{e.n}</span>
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-12 h-1 ${e.c} rounded-full opacity-50`}></div>
+                                            <div className="w-4 h-3 border border-white/20 rounded-sm flex items-center justify-center"><div className="w-1 h-1 bg-cyan-500 rounded-full"></div></div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                {/* --- TIMELINE --- */}
-                <div className="h-[25vh] min-h-[150px] bg-[#1a1a1a] border-t border-[#000] flex flex-col shrink-0">
-                    <div className="h-6 bg-[#1f1f1f] border-b border-[#000] flex items-center px-4 justify-between text-[#888] text-[9px] font-mono">
-                        <div className="flex items-center gap-6">
-                            <span className="font-bold text-gray-500">Seq_01</span>
-                            <span className="text-orange-500">1080p24</span>
-                        </div>
-                        <div className="text-blue-400">00:00:23:14</div>
+            </div>
+
+            {/* --- TIMELINE --- */}
+            <div className="h-[20vh] md:h-[28vh] min-h-[120px] md:min-h-[180px] bg-black/50 backdrop-blur-xl border-t border-white/10 flex flex-col shrink-0 z-40 relative">
+                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
+                <div className="h-8 bg-white/5 border-b border-white/10 flex items-center px-4 justify-between text-gray-400 text-[10px] font-mono">
+                    <div className="flex items-center gap-6">
+                        <span className="font-bold text-gray-200 bg-white/10 px-3 py-1 rounded-sm">Sequence_01</span>
+                        <span className="text-cyan-500 tracking-widest">3840x2160 • 23.976fps</span>
+                    </div>
+                    <div className="text-cyan-400 font-bold bg-black/50 px-3 py-1 rounded border border-white/5 tracking-wider">00:00:23:14</div>
+                </div>
+
+                <div className="flex-1 flex overflow-hidden">
+                    <div className="w-12 border-r border-white/10 flex flex-col items-center py-4 gap-6 text-gray-500 bg-black/40">
+                        <div className="p-1.5 bg-cyan-500/20 text-cyan-400 rounded cursor-pointer box-content"><MousePointer2 size={16} /></div>
+                        <div className="p-1.5 hover:bg-white/10 rounded cursor-pointer transition-colors box-content"><Scissors size={16} /></div>
+                        <div className="p-1.5 hover:bg-white/10 rounded cursor-pointer transition-colors box-content"><GripHorizontal size={16} /></div>
                     </div>
 
-                    <div className="flex-1 flex overflow-hidden">
-                        <div className="w-10 border-r border-[#000] flex flex-col items-center py-4 gap-6 text-[#666]">
-                            <MousePointer2 size={14} className="text-blue-500" />
-                            <Scissors size={14} />
-                            <GripHorizontal size={14} />
-                        </div>
-
-                        <div className="flex-1 bg-[#151515] relative p-1 flex flex-col gap-1 overflow-hidden">
-                            {/* Playhead Overlay */}
-                            <div className="absolute inset-0 pointer-events-none z-50">
-                                <motion.div
-                                    style={{ left: timelineWidth }}
-                                    className="absolute top-0 bottom-0 w-[1px] bg-red-600 h-full"
-                                >
-                                    <div className="w-3 h-4 bg-red-600 -mx-[1.5px] rounded-b-sm shadow-sm"></div>
-                                </motion.div>
-                            </div>
-
-                            {/* Tracks */}
-                            <div className="h-8 bg-[#222] border border-white/5 relative flex items-center group">
-                                <div className="absolute left-0 w-8 h-full bg-[#333] border-r border-black flex items-center justify-center text-[8px] font-bold text-gray-500">V2</div>
-                                <div className="absolute left-[10%] w-[15%] h-full bg-pink-500/20 border border-pink-500/40 flex items-center px-1 text-[8px] text-pink-300 rounded-sm">Teks_Intro</div>
-                                <div className="absolute left-[60%] w-[20%] h-full bg-pink-500/20 border border-pink-500/40 flex items-center px-1 text-[8px] text-pink-300 rounded-sm">Lower_Third</div>
-                            </div>
-                            <div className="h-8 bg-[#222] border border-white/5 relative flex items-center group">
-                                <div className="absolute left-0 w-8 h-full bg-[#333] border-r border-black flex items-center justify-center text-[8px] font-bold text-gray-500">V1</div>
-                                <div className="absolute left-[5%] w-[40%] h-full bg-blue-500/20 border border-blue-500/40 flex items-center px-1 text-[8px] text-blue-300 rounded-sm">Klip_Utama_01.mp4</div>
-                                <div className="absolute left-[45%] w-[35%] h-full bg-blue-500/20 border border-blue-500/40 flex items-center px-1 text-[8px] text-blue-300 rounded-sm">Klip_Utama_02.mp4</div>
-                            </div>
-                            <div className="h-8 bg-[#222] border border-white/5 mt-1 flex items-center relative group">
-                                <div className="absolute left-0 w-8 h-full bg-[#333] border-r border-black flex items-center justify-center text-[8px] font-bold text-gray-500">A1</div>
-                                <div className="absolute left-0 w-full h-full bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-[1px] px-8 pl-10 opacity-60">
-                                    {[...Array(80)].map((_, i) => <div key={i} className="flex-1 bg-emerald-500" style={{ height: `${30 + Math.random() * 70}%` }}></div>)}
+                    <div className="flex-1 bg-black/40 relative p-1.5 flex flex-col gap-1.5 overflow-hidden">
+                        {/* Playhead Overlay */}
+                        <div className="absolute inset-0 pointer-events-none z-50">
+                            <motion.div
+                                style={{ left: timelineWidth }}
+                                className="absolute top-0 bottom-0 w-[1px] bg-red-500 border-r border-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.8)] h-full"
+                            >
+                                <div className="w-4 h-5 bg-red-500 -mx-[2px] rounded-b-sm shadow-[0_4px_10px_rgba(239,68,68,0.5)] flex items-center justify-center">
+                                    <div className="w-1 h-2 border-x border-black/30"></div>
                                 </div>
+                            </motion.div>
+                        </div>
+
+                        {/* Tracks */}
+                        {/* Video Track 2 */}
+                        <div className="h-10 bg-white/5 border border-white/10 rounded-r-md relative flex items-center group">
+                            <div className="absolute left-0 w-10 h-full bg-black/60 border-r border-white/10 flex items-center justify-center text-[10px] font-black text-gray-500 tracking-wider">V2</div>
+                            <div className="absolute left-[10%] w-[15%] h-[80%] bg-pink-500/20 border border-pink-500/40 flex items-center px-2 text-[9px] text-pink-300 rounded shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] hover:bg-pink-500/30 transition-colors cursor-pointer backdrop-blur-sm">Teks_Pembuka</div>
+                            <div className="absolute left-[60%] w-[20%] h-[80%] bg-pink-500/20 border border-pink-500/40 flex items-center px-2 text-[9px] text-pink-300 rounded shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] hover:bg-pink-500/30 transition-colors cursor-pointer backdrop-blur-sm">LowerThird_Nama</div>
+                        </div>
+
+                        {/* Video Track 1 */}
+                        <div className="h-10 bg-white/5 border border-white/10 rounded-r-md relative flex items-center group">
+                            <div className="absolute left-0 w-10 h-full bg-black/60 border-r border-white/10 flex items-center justify-center text-[10px] font-black text-cyan-500 tracking-wider">V1</div>
+                            <div className="absolute left-[5%] w-[40%] h-[80%] bg-cyan-600/30 border border-cyan-400/50 flex items-center px-2 text-[9px] text-cyan-100 font-mono rounded overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] hover:bg-cyan-500/40 transition-colors cursor-pointer backdrop-blur-sm">
+                                <div className="w-full truncate">A001_C004_PRORES.MXF</div>
+                                <div className="absolute left-0 bottom-0 w-full h-[2px] bg-gradient-to-r from-cyan-400 to-transparent opacity-50"></div>
+                            </div>
+                            <div className="absolute left-[47%] w-[35%] h-[80%] bg-cyan-600/30 border border-cyan-400/50 flex items-center px-2 text-[9px] text-cyan-100 font-mono rounded overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] hover:bg-cyan-500/40 transition-colors cursor-pointer backdrop-blur-sm">
+                                <div className="w-full truncate">A001_C012_PRORES.MXF</div>
+                                <div className="absolute left-0 bottom-0 w-full h-[2px] bg-gradient-to-r from-cyan-400 to-transparent opacity-50"></div>
+                            </div>
+                        </div>
+
+                        {/* Audio Track 1 */}
+                        <div className="h-12 bg-white/[0.03] border border-white/5 mt-2 rounded-r-md flex items-center relative group">
+                            <div className="absolute left-0 w-10 h-full bg-black/60 border-r border-white/10 flex items-center justify-center text-[10px] font-black text-emerald-500 tracking-wider">A1</div>
+                            <div className="absolute left-0 w-full h-full bg-emerald-950/30 border border-emerald-500/20 flex items-center gap-[1px] px-12 pl-[50px] opacity-80 backdrop-blur-sm">
+                                {[...Array(120)].map((_, i) => <div key={i} className="flex-1 bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t-sm opacity-70" style={{ height: `${20 + Math.random() * 60}%` }}></div>)}
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
 
         </div>
