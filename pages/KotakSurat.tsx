@@ -32,15 +32,16 @@ const Noise = () => (
 );
 
 export const KotakSurat = () => {
+    const { profile } = useAuth();
+    const isAdmin = profile?.role === 'admin';
+
     const [letters, setLetters] = useState<Letter[]>([]);
     const [isWriting, setIsWriting] = useState(false);
-    const [formData, setFormData] = useState<FormData>({ name: '', social: '', message: '' });
+    // Profile type might not have full_name strictly defined, so fallback to just username or empty string.
+    const [formData, setFormData] = useState<FormData>({ name: profile?.username || '', social: '', message: '' });
     const [isLoading, setIsLoading] = useState(true);
     const [isSending, setIsSending] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-    const { profile } = useAuth();
-    const isAdmin = profile?.role === 'admin';
 
     useEffect(() => {
         const fetchLetters = async () => {
@@ -83,17 +84,18 @@ export const KotakSurat = () => {
         };
 
         try {
-            const { error } = await supabase
+            const { data, error } = await supabase
                 .from('letters')
-                .insert([newLetterData]);
+                .insert([newLetterData])
+                .select()
+                .single();
 
             if (error) {
                 setErrorMsg('Gagal mengirim: ' + error.message);
-            } else {
-                const localLetter = { ...newLetterData, id: Math.random().toString(), created_at: new Date().toISOString() } as Letter;
-                setLetters((prev) => [localLetter, ...prev]);
+            } else if (data) {
+                setLetters((prev) => [data as Letter, ...prev]);
                 setIsWriting(false);
-                setFormData({ name: '', social: '', message: '' });
+                setFormData({ name: profile?.username || '', social: '', message: '' });
             }
         } catch (err: any) {
             setErrorMsg('Terjadi kesalahan saat mengirim.');
@@ -196,12 +198,17 @@ export const KotakSurat = () => {
                 )}
             </div>
 
-            {/* Footer Action */}
             <div className="relative z-10 flex flex-col items-center gap-8 mt-auto px-4">
                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => setIsWriting(true)}
+                    onClick={() => {
+                        if (!profile) {
+                            alert("Anda harus login untuk mengirim pesan.");
+                            return;
+                        }
+                        setIsWriting(true);
+                    }}
                     className="px-8 py-4 bg-white text-black rounded-full font-bold text-lg flex items-center gap-3 shadow-[0_0_50px_-10px_rgba(255,255,255,0.3)] hover:shadow-white/50 transition-all font-serif group"
                 >
                     <MessageSquarePlus size={20} className="group-hover:-rotate-12 transition-transform" />
