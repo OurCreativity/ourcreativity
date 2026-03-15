@@ -84,17 +84,18 @@ export const KotakSurat = () => {
         };
 
         try {
-            const { error } = await supabase
+            const { data, error } = await supabase
                 .from('letters')
-                .insert([newLetterData]);
+                .insert([newLetterData])
+                .select()
+                .single();
 
             if (error) {
                 setErrorMsg('Gagal mengirim: ' + error.message);
-            } else {
-                const localLetter = { ...newLetterData, id: Math.random().toString(), created_at: new Date().toISOString() } as Letter;
-                setLetters((prev) => [localLetter, ...prev]);
+            } else if (data) {
+                setLetters((prev) => [data as Letter, ...prev]);
                 setIsWriting(false);
-                setFormData({ name: '', social: '', message: '' });
+                setFormData({ name: profile?.username || '', social: '', message: '' });
             }
         } catch (err: any) {
             setErrorMsg('Terjadi kesalahan saat mengirim.');
