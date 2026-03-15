@@ -1,24 +1,41 @@
 import { useCallback } from 'react';
 
+export type HapticType =
+    | 'light' | 'medium' | 'heavy'
+    | 'hover' | 'tap' | 'action' | 'navigation'
+    | 'success' | 'error' | 'warning';
+
 export const useHaptic = () => {
-    const playHaptic = useCallback((type: 'light' | 'medium' | 'heavy' | 'success' | 'error' = 'light') => {
+    const playHaptic = useCallback((type: HapticType = 'light') => {
         if (typeof window !== 'undefined' && window.navigator && window.navigator.vibrate) {
             try {
                 switch (type) {
                     case 'light':
-                        window.navigator.vibrate(15);
+                    case 'hover':
+                        window.navigator.vibrate(10);
                         break;
                     case 'medium':
-                        window.navigator.vibrate(30);
+                    case 'navigation':
+                        window.navigator.vibrate(20);
                         break;
                     case 'heavy':
-                        window.navigator.vibrate([40, 30, 60]);
+                    case 'tap':
+                        window.navigator.vibrate(30);
+                        break;
+                    case 'action':
+                        // Distinct double tap for primary actions
+                        window.navigator.vibrate([30, 40, 30]);
                         break;
                     case 'success':
-                        window.navigator.vibrate([15, 30, 25]);
+                        // Ascending feel
+                        window.navigator.vibrate([15, 30, 45]);
                         break;
                     case 'error':
-                        window.navigator.vibrate([50, 40, 50, 40, 50]);
+                        // Stuttering feel
+                        window.navigator.vibrate([50, 30, 50, 30, 50]);
+                        break;
+                    case 'warning':
+                        window.navigator.vibrate([40, 40, 40]);
                         break;
                 }
             } catch (e) {
