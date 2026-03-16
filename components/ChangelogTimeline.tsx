@@ -25,7 +25,7 @@ export const ChangelogTimeline = () => {
         queryFn: async () => {
             const { data, error } = await supabase
                 .from('announcements')
-                .select('id, version, major_version, title, subtitle, date, description, content, changes, highlights, color, category')
+                .select('id, version, major_version, title, subtitle, date, description, content, highlights, color, category')
                 .eq('type', 'changelog')
                 .order('major_version', { ascending: false })
                 .order('date', { ascending: false });

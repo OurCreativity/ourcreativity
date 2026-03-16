@@ -4,6 +4,7 @@ import { BrutalistCard } from '../components/BrutalistCard';
 import { ContributorModal } from '../components/ContributorModal';
 import { FetchErrorState } from '../components/FetchErrorState';
 import { Users, AlertCircle, Github } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 // --- Tipe Data ---
 interface Contributor {
@@ -173,6 +174,42 @@ export const Tim = () => {
           contributions: 2
         });
         delete reportersMap['fk0u'];
+      }
+
+      // Ambil data dari database team_members (misalnya untuk menambahkan rfypych)
+      const { data: dbTeamMembers, error: dbError } = await supabase
+        .from('team_members')
+        .select('*')
+        .eq('is_active', true);
+
+      if (!dbError && dbTeamMembers) {
+        dbTeamMembers.forEach(member => {
+          if (member.division?.toLowerCase().includes('security') || member.role?.toLowerCase().includes('reporter')) {
+            if (!reportersMap[member.name]) {
+              reportersMap[member.name] = {
+                login: member.name,
+                avatar_url: member.avatar_url || '',
+                html_url: member.social_links?.github || `https://github.com/${member.name}`,
+                issueTitle: member.bio || member.role,
+                issueCount: 1
+              };
+            }
+          } else {
+            if (!contribData.some(c => c.login === member.name)) {
+              contribData.push({
+                login: member.name,
+                avatar_url: member.avatar_url || '',
+                html_url: member.social_links?.github || `https://github.com/${member.name}`,
+                contributions: 1
+              });
+            }
+            BIO_MAPPING[member.name] = {
+              bio: member.bio || '',
+              twitter: member.social_links?.twitter,
+              website: member.social_links?.website
+            };
+          }
+        });
       }
 
       // 3. Fetch Bio for contributors (individual profile calls needed but let's use mapping + fallback)
