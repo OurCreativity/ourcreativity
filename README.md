@@ -1,334 +1,198 @@
 <div align="center">
 
-# 🎨 OurCreativity
+# OurCreativity
 
-### Revolution Edition v5.0
+**Platform Komunitas Kreatif — Revolution Edition v5.0**
 
-![Version](https://img.shields.io/badge/Versi-5.0.0-0D1117?style=for-the-badge&labelColor=1a1a2e)
-![Status](https://img.shields.io/badge/Status-Aktif-00d26a?style=for-the-badge&labelColor=1a1a2e)
-![License](https://img.shields.io/badge/Lisensi-MIT-blue?style=for-the-badge&labelColor=1a1a2e)
+![Version](https://img.shields.io/badge/versi-5.0.0-0D1117?style=flat-square&labelColor=1a1a2e)
+![Status](https://img.shields.io/badge/status-aktif-00d26a?style=flat-square&labelColor=1a1a2e)
+![License](https://img.shields.io/badge/lisensi-MIT-blue?style=flat-square&labelColor=1a1a2e)
 
-![React](https://img.shields.io/badge/React-19.2.0-61DAFB?style=flat-square&logo=react&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8.2-3178C6?style=flat-square&logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-6.2.0-646CFF?style=flat-square&logo=vite&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
-![Framer Motion](https://img.shields.io/badge/Framer_Motion-Latest-FF0055?style=flat-square&logo=framer&logoColor=white)
+React 19 · TypeScript · Vite 6 · Tailwind CSS · Framer Motion · Supabase
 
-<br/>
-
-**Platform Komunitas Kreatif Generasi Berikutnya**
-
-*Merangkai Imajinasi, Menghidupkan Karya.*
-
-<br/>
-
-[Lihat Demo](https://ourcreativity.vercel.app) · [Laporkan Bug](https://github.com/ardelyo/ourcreativity/issues) · [Ajukan Fitur](https://github.com/ardelyo/ourcreativity/issues)
-
----
+[Demo](https://ourcreativity.vercel.app) · [Laporkan Bug](https://github.com/ardelyo/ourcreativity/issues) · [Ajukan Fitur](https://github.com/ardelyo/ourcreativity/issues)
 
 </div>
 
-<br/>
+---
 
-## 🌐 English Quick Start
+## Apa Ini?
 
-**OurCreativity** is a creative community platform built with React 19, TypeScript, and Tailwind CSS. It showcases creative works across five divisions: Graphics, Coding, Video, Writing, and Memes.
+OurCreativity adalah platform buat komunitas kreatif. Tempat orang-orang showcase karya mereka — mulai dari desain grafis, coding, video, tulisan, sampai meme. Dibangun pakai React 19, TypeScript, dan Supabase sebagai backend.
 
-### Quick Setup
-```bash
-git clone https://github.com/ardelyo/ourcreativity.git
-cd ourcreativity
-npm install
-cp .env.example .env  # Add your Supabase credentials
-npm run dev
-```
-
-📖 **For detailed setup instructions, see [docs/SETUP.md](docs/SETUP.md)** (available in Indonesian with key technical details)
+Versi 5.0 ini hasil rebuild total dari UI sebelumnya. Navigasi sekarang pakai Bento Grid, animasi pakai Framer Motion, dan routing sudah pakai BrowserRouter biar URL-nya bisa di-share.
 
 ---
 
-<br/>
+## Fitur
 
-## 📋 Daftar Isi
+**Lima divisi kreativitas:**
 
-- [English Quick Start](#-english-quick-start)
-- [Tentang Proyek](#-tentang-proyek)
-- [Fitur Utama](#-fitur-utama)
-- [Tech Stack](#-tech-stack)
-- [Memulai](#-memulai)
-- [Struktur Proyek](#-struktur-proyek)
-- [Dokumentasi](#-dokumentasi)
-- [Kontribusi](#-kontribusi)
-- [Governance](#-governance)
-- [Tim Pengembang](#-tim-pengembang)
-- [Lisensi](#-lisensi)
+| Divisi | Isi |
+|--------|-----|
+| Grafis | Seni digital, UI/UX, ilustrasi |
+| Coding | Project software, eksperimen kode |
+| Video | Karya sinematik, short film |
+| Menulis | Artikel, cerita, jurnalisme |
+| Meme | Ya... meme |
 
-<br/>
+**Yang baru di v5.0:**
+- BrowserRouter — URL yang persistent dan bisa di-share
+- Error Boundary — kalau ada error, nggak langsung white screen
+- Creation Studio v2 — editor multi-format (slide, code, text, video)
+- Fetch error states dengan tombol retry
+- Glassmorphism dan pencahayaan dinamis di seluruh UI
 
-## 🌟 Tentang Proyek
+Detail perubahan lengkap ada di [docs/MASTER_UPDATE_V5.md](docs/MASTER_UPDATE_V5.md).
 
-**OurCreativity** adalah platform ekosistem digital yang dirancang untuk menjadi wadah utama bagi para kreator dari berbagai disiplin ilmu. Dibangun dengan filosofi **"Luminous Design"**, platform ini menawarkan pengalaman visual yang mendalam, elegan, dan futuristik.
+---
 
-Versi 5.0 (**Revolution Edition**) menandai transformasi total dari antarmuka pengguna, menghadirkan:
+## Tech Stack
 
-- ✅ Interaksi yang cair dan responsif
-- ✅ Performa tinggi dengan optimisasi modern
-- ✅ Struktur navigasi berbasis *Bento Grid* yang intuitif
-- ✅ Nuansa atmosferik dan pencahayaan dinamis
-- 🆕 **Master Update v5.0** — [Lihat Detail Perubahan Besar](docs/MASTER_UPDATE_V5.md)
-- 🆕 **BrowserRouter** dengan URL yang persisten dan shareable
-- 🆕 **Error Boundary** untuk penanganan error yang user-friendly
-- 🆕 **Fetch Error States** dengan retry functionality
+| | |
+|---|---|
+| Framework | React 19 |
+| Bahasa | TypeScript 5.8 |
+| Build Tool | Vite 6 |
+| Styling | Tailwind CSS 3 |
+| Animasi | Framer Motion |
+| Routing | React Router DOM |
+| Database | Supabase |
+| Ikon | Lucide React |
 
-<br/>
+---
 
-## ✨ Fitur Utama
+## Cara Jalankan
 
-### 🎨 Desain Luminous
-Antarmuka yang hidup dengan kedalaman visual, efek glassmorphism, dan pencahayaan ambien yang bereaksi terhadap interaksi pengguna.
+Butuh **Node.js v18+** dan **npm** atau **yarn**.
 
-### 🧩 Lima Divisi Kreativitas
+```bash
+# clone repo
+git clone https://github.com/ardelyo/ourcreativity.git
+cd ourcreativity
 
-| Divisi | Deskripsi |
-|--------|-----------|
-| **🖼️ Grafis** | Galeri visual untuk seni digital, UI/UX, dan ilustrasi |
-| **💻 Coding** | Showcase untuk rekayasa perangkat lunak dan eksperimen kode |
-| **🎬 Video** | Teater sinematik untuk karya gambar bergerak |
-| **✍️ Menulis** | Ruang editorial untuk literatur dan jurnalisme |
-| **😂 Meme** | Pusat budaya internet yang dinamis dan penuh humor |
+# install dependencies
+npm install
 
-### 📱 Pengalaman Pengguna Premium
-- **Animasi Fluid** — Transisi halaman menggunakan Framer Motion
-- **Creation Studio v2** — Editor multi-fungsi (Slide, Code, Text, Video)
-- **Dynamic Island** — Navigasi adaptif dan cair
-- **Responsif Total** — Optimal di desktop, tablet, dan mobile
+# setup environment
+cp .env.example .env
+# isi .env dengan kredensial Supabase kamu
 
-<br/>
+# jalankan
+npm run dev
+```
 
-## 🛠️ Tech Stack
+Buka `http://localhost:5173` di browser.
 
-Proyek ini dibangun di atas fondasi teknologi web modern:
+Kalau butuh panduan setup Supabase yang lebih detail, baca [docs/SETUP.md](docs/SETUP.md).
 
-| Kategori | Teknologi |
-|----------|-----------|
-| **Framework** | React v19 |
-| **Bahasa** | TypeScript v5.8 |
-| **Build Tool** | Vite v6 |
-| **Styling** | Tailwind CSS v3 (File-based Config) |
-| **Animasi** | Framer Motion |
-| **Routing** | React Router DOM (BrowserRouter) |
-| **Database** | Supabase |
-| **Ikon** | Lucide React |
-| **Error Handling** | React Error Boundary |
+### Perintah Lain
 
-<br/>
+```bash
+npm run build     # build produksi
+npm run preview   # preview hasil build
+```
 
-## 🚀 Memulai
+---
 
-### Prasyarat
-
-Pastikan Anda telah menginstal:
-- **Node.js** v18 atau lebih baru
-- **npm** atau **yarn**
-
-### Instalasi
-
-1. **Clone repositori**
-   ```bash
-   git clone https://github.com/ardelyo/ourcreativity.git
-   ```
-
-2. **Masuk ke direktori proyek**
-   ```bash
-   cd ourcreativity
-   ```
-
-3. **Instal dependensi**
-   ```bash
-   npm install
-   # atau
-   yarn install
-   ```
-
-4. **Jalankan server pengembangan**
-   ```bash
-   npm run dev
-   # atau
-   yarn dev
-   ```
-
-5. **Konfigurasi Environment**
-   ```bash
-   cp .env.example .env
-   # Edit .env dengan kredensial Supabase kamu
-   ```
-
-6. **Buka di browser**
-   ```
-   http://localhost:5173
-   ```
-
-> 📖 Untuk panduan setup lengkap termasuk Supabase, lihat [Panduan Setup](docs/SETUP.md)
-
-### Perintah Tersedia
-
-| Perintah | Deskripsi |
-|----------|-----------|
-| `npm run dev` | Menjalankan server pengembangan |
-| `npm run build` | Build untuk produksi |
-| `npm run preview` | Preview build produksi |
-
-<br/>
-
-## 📂 Struktur Proyek
+## Struktur Folder
 
 ```
 ourcreativity/
-│
-├── 📁 components/        # Komponen UI Reusable
+├── components/        # komponen UI yang reusable
 │   ├── BentoGrid/
 │   ├── Navbar/
 │   ├── CreationStudio/
 │   └── ...
-│
-├── 📁 pages/             # Halaman Aplikasi
+├── pages/             # halaman-halaman aplikasi
 │   ├── Home.tsx
 │   ├── Karya.tsx
 │   ├── Tim.tsx
 │   └── ...
-│
-├── 📁 lib/               # Utilities & Helpers
-│   └── supabase.ts       # Supabase client
-│
-├── 📁 docs/              # Dokumentasi (Bahasa Indonesia)
-│   ├── versions/         # Arsip Riwayat Versi
-│   ├── ARSITEKTUR.md
-│   ├── KOMPONEN.md
-│   └── ...
-│
-├── 📄 App.tsx            # Komponen Root & Routing
-├── 📄 index.css          # Global Styles
-├── 📄 tailwind.config.ts # Konfigurasi Tailwind
-├── 📄 vite.config.ts     # Konfigurasi Vite
-└── 📄 README.md
+├── lib/               # utilities
+│   └── supabase.ts
+├── docs/              # dokumentasi (Bahasa Indonesia)
+├── App.tsx            # root component & routing
+├── index.css          # global styles
+├── tailwind.config.ts
+└── vite.config.ts
 ```
 
-<br/>
+---
 
-## 📚 Dokumentasi
+## Dokumentasi
 
-Dokumentasi teknis lengkap tersedia dalam **Bahasa Indonesia**:
+Semua dokumentasi ditulis dalam Bahasa Indonesia.
 
-| Dokumen | Deskripsi |
-|---------|-----------|
-| 🚀 [Panduan Setup](docs/SETUP.md) | **MULAI DARI SINI** - Install & konfigurasi |
-| ✨ [**Master Update v5.0**](docs/MASTER_UPDATE_V5.md) | **BARU!** - Ringkasan fitur revolusioner v5.0 |
-| 🗄️ [Database](docs/DATABASE.md) | Schema & query Supabase |
-| 🏗️ [Arsitektur Sistem](docs/ARSITEKTUR.md) | Struktur kode dan keputusan teknis |
-| 🛣️ [**Routing**](docs/ROUTING.md) | **BARU!** - Panduan lengkap sistem routing |
-| 🧩 [Komponen UI](docs/KOMPONEN.md) | Panduan penggunaan komponen |
-| 📄 [Halaman](docs/HALAMAN.md) | Detail implementasi setiap halaman |
-| 🚀 [Deployment](docs/PANDUAN_DEPLOYMENT.md) | Panduan peluncuran ke produksi |
-| 🤝 [Kontribusi](docs/KONTRIBUSI.md) | Standar kode dan alur kerja |
-| 📝 [Catatan Pengembang](docs/CATATAN_PENGEMBANG.md) | Catatan teknis dan TODO |
-| 📜 [Riwayat Versi](docs/versions/RIWAYAT_VERSI_LENGKAP.md) | Sejarah evolusi proyek |
+| Dokumen | Tentang |
+|---------|---------|
+| [Setup](docs/SETUP.md) | Instalasi dan konfigurasi awal |
+| [Master Update v5.0](docs/MASTER_UPDATE_V5.md) | Ringkasan perubahan besar di v5.0 |
+| [Database](docs/DATABASE.md) | Schema dan query Supabase |
+| [Arsitektur](docs/ARSITEKTUR.md) | Struktur kode dan keputusan teknis |
+| [Routing](docs/ROUTING.md) | Sistem routing aplikasi |
+| [Komponen](docs/KOMPONEN.md) | Cara pakai tiap komponen |
+| [Halaman](docs/HALAMAN.md) | Detail implementasi halaman |
+| [Deployment](docs/PANDUAN_DEPLOYMENT.md) | Cara deploy ke produksi |
+| [Kontribusi](docs/KONTRIBUSI.md) | Standar kode dan alur kerja |
+| [Riwayat Versi](docs/versions/RIWAYAT_VERSI_LENGKAP.md) | Sejarah versi dari awal |
 
-<br/>
+---
 
-## 🤝 Kontribusi
+## Kontribusi
 
-Kontribusi sangat kami hargai! Untuk berkontribusi:
+Mau bantu? Silakan.
 
-1. Fork repositori ini
-2. Buat branch fitur (`git checkout -b fitur/FiturBaru`)
-3. Commit perubahan (`git commit -m 'Menambahkan FiturBaru'`)
-4. Push ke branch (`git push origin fitur/FiturBaru`)
+1. Fork repo ini
+2. Buat branch baru (`git checkout -b fitur/nama-fitur`)
+3. Commit perubahanmu (`git commit -m 'Tambah fitur X'`)
+4. Push (`git push origin fitur/nama-fitur`)
 5. Buat Pull Request
 
-> 📖 Baca [Panduan Kontribusi](docs/KONTRIBUSI.md) dan [CONTRIBUTING.md](./CONTRIBUTING.md) untuk informasi lebih detail.
+Baca [CONTRIBUTING.md](./CONTRIBUTING.md) dulu sebelum mulai biar nggak bingung soal standar kode dan alur review.
 
-<br/>
+---
 
-## 🏛️ Governance
+## Governance
 
-OurCreativity is governed transparently with clear ownership and decision-making processes.
+| Dokumen | Fungsi |
+|---------|--------|
+| [MAINTAINERS.md](./MAINTAINERS.md) | Siapa yang maintain, bagaimana keputusan diambil |
+| [ROADMAP.md](./ROADMAP.md) | Rencana fitur ke depan |
+| [CHANGELOG.md](./CHANGELOG.md) | Riwayat rilis |
+| [AUTHORS.md](./AUTHORS.md) | Daftar kontributor |
+| [SECURITY.md](./SECURITY.md) | Laporan masalah keamanan |
 
-### Key Governance Documents
+Punya pertanyaan? Buka [GitHub Discussions](https://github.com/ardelyo/ourcreativity/discussions).
+Nemuin bug? Buat [issue](https://github.com/ardelyo/ourcreativity/issues).
 
-| Document | Purpose |
-|----------|---------|
-| **[MAINTAINERS.md](./MAINTAINERS.md)** | Project leadership, responsibilities, and decision framework |
-| **[ROADMAP.md](./ROADMAP.md)** | Future direction and planned features |
-| **[CHANGELOG.md](./CHANGELOG.md)** | Release history and what changed |
-| **[CONTRIBUTING.md](./CONTRIBUTING.md)** | How to contribute to the project |
-| **[AUTHORS.md](./AUTHORS.md)** | All contributors and their roles |
+---
 
-### Escalation & Support
+## Tim
 
-- **Questions?** [GitHub Discussions](https://github.com/ardelyo/ourcreativity/discussions)
-- **Bug Reports?** [GitHub Issues](https://github.com/ardelyo/ourcreativity/issues)
-- **Security Issues?** See [SECURITY.md](./SECURITY.md)
+**Ardelyo** — Lead Developer & Designer
+**DoctorThink** — Code Refactoring & Documentation
 
-<br/>
+---
 
-## 👥 Tim Pengembang
+## Soal Lisensi dan Brand
 
-<table>
-  <tr>
-    <td align="center">
-      <strong>Ardelyo</strong><br/>
-      <sub>Lead Developer & Designer</sub>
-    </td>
-    <td align="center">
-      <strong>DoctorThink</strong><br/>
-      <sub>Code Refactoring & Documentation</sub>
-    </td>
-  </tr>
-</table>
+Kodenya open source di bawah lisensi MIT. Bebas dipakai buat belajar, dimodifikasi, atau dipakai di project sendiri — termasuk komersial.
 
-<br/>
-
-## ⚠️ Penggunaan Brand & Lisensi
-
-### 📝 Penting Dibaca!
-
-**OurCreativity adalah proyek open source untuk edukasi**, dengan aturan sederhana:
-
-✅ **Kode: Bebas dipakai** (MIT License)
-- Gratis untuk belajar, modifikasi, dan pakai di project sendiri
-- Boleh untuk komersial
-- Boleh fork dan distribute
-
-⚠️ **Brand: Dilindungi**
-- **JANGAN pakai** nama "OurCreativity" untuk website/project kamu
-- **JANGAN copy** logo dan identitas visual kami
-- Tujuan: Menghindari kebingungan di komunitas
-
-> 📖 **Baca detail lengkap:** [BRAND_USAGE.md](./BRAND_USAGE.md) (Bahasa Indonesia, mudah dipahami!)
-
-<br/>
-
-## 📄 Lisensi
-
+Tapi nama "OurCreativity", logo, dan identitas visualnya dilindungi. Jangan pakai nama atau logo kami buat project lain supaya nggak bikin bingung orang. Detail lengkapnya ada di [BRAND_USAGE.md](./BRAND_USAGE.md).
 
 ```
 Hak Cipta © 2025 OurCreativity
-
-Proyek ini dilisensikan di bawah Lisensi MIT.
-Lihat file LICENSE untuk informasi lebih lanjut.
+Dilisensikan di bawah Lisensi MIT.
 ```
-
-<br/>
 
 ---
 
 <div align="center">
 
-**Dibuat dengan ❤️ dan ☕ oleh Tim OurCreativity Edisi Coding**
+Dibuat oleh Tim OurCreativity — Edisi Coding
 
-*"Merangkai Imajinasi Kita."*
-
-<br/>
+*Merangkai Imajinasi Kita.*
 
 [![GitHub Stars](https://img.shields.io/github/stars/ardelyo/ourcreativity?style=social)](https://github.com/ardelyo/ourcreativity)
 
